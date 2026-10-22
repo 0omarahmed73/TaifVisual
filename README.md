@@ -22,6 +22,13 @@ A free, local-first desktop utility for trimming, cutting, compressing, converti
 
 Everything runs on your device. No servers, no accounts.
 
+## Download
+
+Installers for Windows and Linux are available on the [**Releases**](https://github.com/0omarahmed73/TaifVisual/releases) page:
+
+- **Windows**: `TAIF_2.0.0_x64_en-US.msi`
+- **Linux (Debian/Ubuntu)**: `TAIF_2.0.0_amd64.deb` — install with `sudo apt install ./TAIF_2.0.0_amd64.deb`
+
 ## Development
 
 Requirements: Node.js 18+, Rust (via [rustup](https://rustup.rs)), and on Linux the Tauri system dependencies:
