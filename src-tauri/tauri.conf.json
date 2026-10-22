@@ -1,0 +1,75 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:1420"
+  },
+  "bundle": {
+    "createUpdaterArtifacts": "v1Compatible",
+    "externalBin": [
+      "bin/ffmpeg",
+      "bin/ffprobe",
+      "bin/ytDlp"
+    ],
+    "active": true,
+    "license": "GPL-3.0",
+    "targets": [
+      "deb",
+      "msi",
+      "app",
+      "dmg"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      }
+    },
+    "publisher": "Omar A. Saeed",
+    "shortDescription": "An Audio/Video utility for cutting, converting, compressing",
+    "category": "Utility",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ]
+  },
+  "productName": "TAIF",
+  "version": "2.0.0",
+  "identifier": "com.taif.app",
+  "plugins": {
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDYxMkVDQjc1QTA0Q0ZGQTMKUldTai8weWdkY3N1WVRiMW9udTNXcGllUHdibGR3UklUQ2VQYXdqc05qNmg5TmF1cmF5allTTHEK",
+      "endpoints": [
+        "https://github.com/mohammadmansour200/taif/releases/latest/download/latest.json"
+      ],
+      "windows": {
+        "installMode": "passive"
+      }
+    }
+  },
+  "app": {
+    "security": {
+      "assetProtocol": {
+        "scope": [
+          "**",
+          "$APPLOCALDATA/**/*"
+        ],
+        "enable": true
+      }
+    },
+    "windows": [
+      {
+        "title": "طَيْف - TAIF",
+        "width": 900,
+        "height": 600,
+        "minWidth": 900,
+        "minHeight": 450,
+        "maximized": true,
+        "center": true
+      }
+    ]
+  }
+}

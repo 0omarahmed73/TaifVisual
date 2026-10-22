@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <defs>
+    <linearGradient id="taif-spectra" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B69CFF"/>
+      <stop offset=".5" stop-color="#7AA8FF"/>
+      <stop offset="1" stop-color="#64D8E8"/>
+    </linearGradient>
+  </defs>
+  <rect width="48" height="48" rx="11" fill="#0D1017"/>
+  <g transform="translate(4.8 4.8) scale(.9)">
+    <path d="M9 14a5 5 0 0 1 5-5h5v20a5 5 0 0 1-10 0Zm10 0a5 5 0 0 1 5-5h5v26a5 5 0 0 1-10 0Zm10 5a5 5 0 0 1 5-5h5v15a5 5 0 0 1-10 0Z" fill="url(#taif-spectra)"/>
+    <path d="M14 9h5v20a5 5 0 0 1-5 5Zm10 0h5v26a5 5 0 0 1-5 5Zm10 5h5v15a5 5 0 0 1-5 5Z" fill="#fff" opacity=".18"/>
+  </g>
+</svg>

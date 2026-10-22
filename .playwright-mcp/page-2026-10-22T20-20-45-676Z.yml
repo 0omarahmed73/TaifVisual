@@ -1,0 +1,32 @@
+- generic:
+  - generic:
+    - banner [aria-hidden]:
+      - generic:
+        - generic:
+          - generic: TAIF
+          - generic: طَيْف
+        - generic: Your media. Your way.
+      - generic:
+        - button [expanded]
+        - button
+    - contentinfo [aria-hidden]:
+      - generic: All processing happens locally when supported.
+      - generic: TAIF · طَيْف
+    - region "Notifications alt+T"
+    - main [aria-hidden]:
+      - generic:
+        - generic: AUDIO & VIDEO TOOLKIT
+        - heading [level=1]: What would you like to make?
+        - paragraph: Import a file to trim, convert, compress, or transform it with focused tools.
+        - button:
+          - generic: Drop a file here
+          - generic: or click to browse your computer (Ctrl + O)
+          - emphasis: COMMON AUDIO, VIDEO & IMAGE FILES
+        - button:
+          - generic: Download from a URL
+  - dialog [ref=f6e52]:
+    - heading "Operations log" [level=2] [ref=f6e53]
+    - paragraph [ref=f6e54]: Send this to me in case an unexpectable behavior happens.
+    - log [ref=f6e55]: No operations logged yet.
+    - button "Copy log" [active] [ref=f6e57] [cursor=pointer]
+    - button "Close" [ref=f6e61] [cursor=pointer]

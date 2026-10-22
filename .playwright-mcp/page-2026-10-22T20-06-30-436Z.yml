@@ -1,0 +1,25 @@
+- generic [ref=f2e2]:
+  - banner [ref=f2e3]:
+    - generic [ref=f2e4]:
+      - generic [ref=f2e5]:
+        - img "TAIF" [ref=f2e6]
+        - generic [ref=f2e9]: TAIF
+        - generic [ref=f2e11]: طَيْف
+      - generic [ref=f2e12]: Your media. Your way.
+    - generic [ref=f2e13]:
+      - button "Operations log" [ref=f2e14] [cursor=pointer]
+      - button "Settings" [ref=f2e24] [cursor=pointer]
+  - contentinfo [ref=f2e28]:
+    - generic [ref=f2e29]: All processing happens locally when supported.
+    - generic [ref=f2e30]: TAIF · طَيْف
+  - region "Notifications alt+T"
+  - main [ref=f2e31]:
+    - generic [ref=f2e32]:
+      - generic [ref=f2e33]: AUDIO & VIDEO TOOLKIT
+      - heading "What would you like to make?" [level=1] [ref=f2e34]
+      - paragraph [ref=f2e35]: Import a file to trim, convert, compress, or transform it with focused tools.
+      - button "Drop a file here or click to browse your computer (Ctrl + O) COMMON AUDIO, VIDEO & IMAGE FILES" [ref=f2e36] [cursor=pointer]:
+        - generic [ref=f2e41]: Drop a file here
+        - generic [ref=f2e42]: or click to browse your computer (Ctrl + O)
+        - emphasis [ref=f2e43]: COMMON AUDIO, VIDEO & IMAGE FILES
+      - button "Download from a URL" [ref=f2e44] [cursor=pointer]

@@ -1,0 +1,206 @@
+@import "@fontsource/manrope/400.css";
+@import "@fontsource/manrope/500.css";
+@import "@fontsource/manrope/600.css";
+@import "@fontsource/manrope/700.css";
+@import "@fontsource/manrope/800.css";
+@import "@fontsource/noto-sans-arabic/400.css";
+@import "@fontsource/noto-sans-arabic/600.css";
+@import "@fontsource/noto-sans-arabic/700.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  TAIF (طَيْف) — dark-first design tokens, from the Figma spec.
+  Canvas #0D1017 · surface #141923 · elevated #1A2130 · border #2A3345.
+  Primary actions are inverted text-on-canvas; the violet→blue→cyan
+  spectrum is reserved for the brand mark, progress and focus moments.
+*/
+@layer base {
+  :root {
+    --background: 225 29% 97%;
+    --foreground: 221 38% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 221 38% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 38% 14%;
+
+    --primary: 221 38% 14%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 24% 93%;
+    --secondary-foreground: 221 38% 14%;
+
+    --muted: 220 24% 93%;
+    --muted-foreground: 218 14% 42%;
+
+    --accent: 220 24% 91%;
+    --accent-foreground: 221 38% 14%;
+
+    --destructive: 358 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 24% 88%;
+    --input: 220 24% 85%;
+    --ring: 221 83% 58%;
+
+    --spectra-start: 256 80% 68%;
+    --spectra-mid: 219 90% 62%;
+    --spectra-end: 187 80% 32%;
+
+    --appbar: 0 0% 100%;
+    --field: 220 24% 97%;
+    --success: 152 55% 34%;
+    --warning: 40 85% 36%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222 28% 7%;
+    --foreground: 220 38% 97%;
+
+    --card: 220 27% 11%;
+    --card-foreground: 220 38% 97%;
+
+    --popover: 220 27% 11%;
+    --popover-foreground: 220 38% 97%;
+
+    --primary: 220 38% 97%;
+    --primary-foreground: 222 30% 10%;
+
+    --secondary: 221 30% 15%;
+    --secondary-foreground: 220 38% 97%;
+
+    --muted: 221 30% 15%;
+    --muted-foreground: 219 18% 71%;
+
+    --accent: 221 30% 15%;
+    --accent-foreground: 220 38% 97%;
+
+    --destructive: 358 77% 73%;
+    --destructive-foreground: 222 30% 10%;
+
+    --border: 220 24% 22%;
+    --input: 220 24% 22%;
+    --ring: 220 100% 79%;
+
+    --appbar: 217 32% 9%;
+    --field: 219 29% 10%;
+    --success: 152 55% 62%;
+    --warning: 42 81% 69%;
+
+    --spectra-start: 256 100% 81%;
+    --spectra-mid: 219 100% 74%;
+    --spectra-end: 187 74% 65%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body {
+    @apply h-full;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family:
+      "Manrope",
+      "Noto Sans Arabic",
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      sans-serif;
+    font-feature-settings: "ss01";
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer components {
+  .ripple {
+    @apply relative isolate overflow-hidden;
+  }
+  /* Spectral gradient — brand mark and the single focused moment only. */
+  .text-spectra {
+    @apply bg-gradient-to-r from-[hsl(var(--spectra-start))] via-[hsl(var(--spectra-mid))] to-[hsl(var(--spectra-end))] bg-clip-text text-transparent;
+  }
+  .bg-spectra {
+    @apply bg-gradient-to-r from-[hsl(var(--spectra-start))] via-[hsl(var(--spectra-mid))] to-[hsl(var(--spectra-end))];
+  }
+  /* AV timeline: thin spectral play line inside a taller touch target. */
+  .taif-timeline {
+    @apply h-[14px] w-full rounded-full bg-transparent outline-none;
+    background-size: 100% 6px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .taif-timeline::-webkit-slider-thumb {
+    height: 14px;
+    width: 14px;
+    border-radius: 9999px;
+    background: hsl(var(--foreground));
+    box-shadow: 0 0 0 2.5px hsl(var(--background));
+    cursor: pointer;
+    -webkit-appearance: none;
+  }
+  .taif-timeline::-moz-range-thumb {
+    height: 14px;
+    width: 14px;
+    border: none;
+    border-radius: 9999px;
+    background: hsl(var(--foreground));
+    box-shadow: 0 0 0 2.5px hsl(var(--background));
+    cursor: pointer;
+  }
+  .taif-timeline:focus-visible {
+    @apply ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+}
+
+*::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+*::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 11px;
+}
+
+#navbar::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  border: 0.2px solid hsl(var(--border));
+  background-color: hsl(var(--muted-foreground));
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  height: 12px;
+  width: 12px;
+  border-radius: 9999px;
+  background: hsl(var(--primary));
+  cursor: pointer;
+  box-shadow: 0 0 0 2.5px hsl(var(--background));
+  -webkit-appearance: none;
+}
+
+input[type="range"]::-moz-range-thumb {
+  height: 12px;
+  width: 12px;
+  border: none;
+  border-radius: 9999px;
+  background: hsl(var(--primary));
+  cursor: pointer;
+  box-shadow: 0 0 0 2.5px hsl(var(--background));
+}

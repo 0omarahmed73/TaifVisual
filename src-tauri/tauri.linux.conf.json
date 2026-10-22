@@ -1,0 +1,17 @@
+{
+  "bundle": {
+    "externalBin": ["bin/SpleeterExe", "bin/ytDlp"],
+    "linux": {
+      "deb": {
+        "depends": ["ffmpeg"],
+        "files": {
+          "usr/bin/lib/libtensorflow.so.1": "resources-linux/libtensorflow.so.1",
+          "usr/bin/lib/libtensorflow_framework.so.1": "resources-linux/libtensorflow_framework.so.1",
+          "usr/bin/models/2stems/saved_model.pb": "models/2stems/saved_model.pb",
+          "usr/bin/models/2stems/variables/variables.data-00000-of-00001": "models/2stems/variables/variables.data-00000-of-00001",
+          "usr/bin/models/2stems/variables/variables.index": "models/2stems/variables/variables.index"
+        }
+      }
+    }
+  }
+}

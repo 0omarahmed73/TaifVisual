@@ -1,0 +1,25 @@
+- generic [ref=f2e2]:
+  - banner [ref=f2e3]:
+    - generic [ref=f2e4]:
+      - generic [ref=f2e5]:
+        - img "TAIF" [ref=f2e6]
+        - generic [ref=f2e9]: TAIF
+        - generic [ref=f2e11]: طَيْف
+      - generic [ref=f2e12]: وسائطك، بطريقتك.
+    - generic [ref=f2e13]:
+      - button "سجل العمليات" [ref=f2e14] [cursor=pointer]
+      - button "الإعدادات" [ref=f2e24] [cursor=pointer]
+  - contentinfo [ref=f2e28]:
+    - generic [ref=f2e29]: تتم المعالجة محليًا على جهازك عند الإمكان.
+    - generic [ref=f2e30]: TAIF · طَيْف
+  - region "Notifications alt+T"
+  - main [ref=f2e31]:
+    - generic [ref=f2e32]:
+      - generic [ref=f2e33]: أدوات الصوت والفيديو
+      - heading "ماذا تريد أن تصنع؟" [level=1] [ref=f2e34]
+      - paragraph [ref=f2e35]: استورد ملفًا لقصه أو تحويله أو ضغطه أو تحويله بأدوات مركّزة.
+      - button "أسقط ملفًا هنا أو اضغط لاستعراض جهازك (Ctrl + O) ملفات صوت وفيديو وصور شائعة" [ref=f2e36] [cursor=pointer]:
+        - generic [ref=f2e41]: أسقط ملفًا هنا
+        - generic [ref=f2e42]: أو اضغط لاستعراض جهازك (Ctrl + O)
+        - emphasis [ref=f2e43]: ملفات صوت وفيديو وصور شائعة
+      - button "تحميل من رابط" [ref=f2e44] [cursor=pointer]

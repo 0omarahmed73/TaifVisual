@@ -1,0 +1,153 @@
+{
+  "identifier": "migrated",
+  "description": "permissions that were migrated from v1",
+  "local": true,
+  "windows": [
+    "main"
+  ],
+  "permissions": [
+    "core:path:default",
+    "core:event:default",
+    "core:window:default",
+    "core:app:default",
+    "core:resources:default",
+    "core:menu:default",
+    "core:tray:default",
+    "fs:allow-read-file",
+    "fs:allow-write-file",
+    "fs:allow-mkdir",
+    "fs:allow-exists",
+    "fs:allow-copy-file",
+    "fs:allow-remove",
+    "fs:allow-applocaldata-write",
+    "fs:allow-resource-read-recursive",
+    {
+      "identifier": "fs:scope",
+      "allow": [
+        "**",
+        "$APPLOCALDATA/**/*",
+        "$VIDEO/*",
+        "$AUDIO/*",
+        "$PICTURE/*",
+        "$DOWNLOAD/**/*"
+      ]
+    },
+    {
+      "identifier": "shell:allow-execute",
+      "allow": [
+        {
+          "args": true,
+          "name": "ffmpeg",
+          "cmd": "ffmpeg"
+        },
+        {
+          "args": true,
+          "name": "ffprobe",
+          "cmd": "ffprobe"
+        },
+        {
+          "args": true,
+          "name": "bin/ffmpeg",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/ffprobe",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/SpleeterExe",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/ytDlp",
+          "sidecar": true
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-spawn",
+      "allow": [
+        {
+          "args": true,
+          "name": "ffmpeg",
+          "cmd": "ffmpeg"
+        },
+        {
+          "args": true,
+          "name": "ffprobe",
+          "cmd": "ffprobe"
+        },
+        {
+          "args": true,
+          "name": "bin/ffmpeg",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/ffprobe",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/SpleeterExe",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/ytDlp",
+          "sidecar": true
+        }
+      ]
+    },
+    {
+      "identifier": "shell:allow-kill",
+      "allow": [
+        {
+          "args": true,
+          "name": "ffmpeg",
+          "cmd": "ffmpeg"
+        },
+        {
+          "args": true,
+          "name": "ffprobe",
+          "cmd": "ffprobe"
+        },
+        {
+          "args": true,
+          "name": "bin/ffmpeg",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/ffprobe",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/SpleeterExe",
+          "sidecar": true
+        },
+        {
+          "args": true,
+          "name": "bin/ytDlp",
+          "sidecar": true
+        }
+      ]
+    },
+    "shell:allow-open",
+    "dialog:allow-open",
+    "dialog:allow-ask",
+    "dialog:allow-message",
+    "notification:default",
+    "fs:default",
+    "shell:default",
+    "dialog:default",
+    "notification:default",
+    "updater:default",
+    "process:default",
+    "process:allow-restart"
+  ]
+}

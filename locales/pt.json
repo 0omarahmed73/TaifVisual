@@ -1,0 +1,169 @@
+{
+  "successBody": "Concluído :)",
+  "successTitle": "Processo finalizado",
+  "playbackPositionTitle": "Posição de reprodução",
+  "bugModalTitle": "Registro de operações",
+  "bugModalDesc": "Envie-me isto caso aconteça um comportamento inesperado.",
+  "bugModalEmpty": "Nenhuma operação registrada ainda.",
+  "bugModalCopyBtn": "Copiar registro",
+  "onboard": {
+    "greetings": "As-salamu alaykum... TAIF é um utilitário gratuito de código aberto, seus objetivos são: ",
+    "goals": {
+      "simplicity": "Simplicidade e facilidade ✨",
+      "speed": "Velocidade ⚡",
+      "privacy": "Privacidade 🔏"
+    },
+    "features": "TAIF permite que você corte/separe, converta, comprima e reduza a qualidade do seu arquivo de áudio/vídeo. Além disso, você pode converter arquivos de áudio para vídeo usando uma imagem estática da sua escolha",
+    "steps": "passos: escolha seu arquivo de vídeo/áudio --> escolha a operação que você quer"
+  },
+  "header": {
+    "darkMode": "Modo escuro",
+    "lightMode": "Modo claro",
+    "system": "Padrão do sistema",
+    "customDir": "Customizado",
+    "defaultDir": "Padrão",
+    "notificationLabel": "Notificações",
+    "update": "Procurar por atualizações...",
+    "updateDownloading": "Baixando atualizações...",
+    "updateLoading": "Procurando...",
+    "settings": {
+      "language": "Idioma",
+      "languageDesc": "Idioma da interface",
+      "appearance": "Aparência",
+      "appearanceDesc": "Escuro, claro ou seguir o sistema",
+      "notificationsDesc": "Avisar quando uma tarefa terminar",
+      "updates": "Atualizações",
+      "updatesDesc": "Verificar se há uma versão mais recente",
+      "checkNow": "Verificar",
+      "outputDir": "Local de saída",
+      "outputDirDesc": "Os arquivos vão para Vídeos/Áudios/Imagens, a menos que você escolha uma pasta",
+      "changeBtn": "Alterar",
+      "resetBtn": "Padrão",
+      "updateFailed": "Não foi possível verificar atualizações. Tente mais tarde."
+    }
+  },
+  "uploadPage": {
+    "uploadFileLabel": "Escolha um arquivo",
+    "subtitle": "Importe um ficheiro para cortar, converter, comprimir ou transformar com ferramentas diretas.",
+    "dropHint": "Arraste e solte seu arquivo em qualquer lugar desta janela, ou pressione Ctrl + O",
+    "dropNow": "Solte para importar",
+    "unsupportedFileErr": "Este tipo de arquivo não é suportado",
+    "importFailedErr": "Não foi possível ler este ficheiro. Tente outro.",
+    "eyebrow": "FERRAMENTAS DE ÁUDIO E VÍDEO",
+    "title": "O que gostaria de criar?",
+    "dropTitle": "Largue um ficheiro aqui",
+    "dropSub": "ou clique para procurar no computador (Ctrl + O)",
+    "formats": "FICHEIROS COMUNS DE ÁUDIO, VÍDEO E IMAGEM",
+    "downloadFromInternetDialogBtn": "Transferir de um URL",
+    "downloadFromInternetBtn": "Transferir média",
+    "downloadFromInternetLabel": "URL do ficheiro",
+    "urlEyebrow": "IMPORTAR DE UM URL",
+    "urlTitle": "Transferir média suportada",
+    "urlDesc": "Cole um link do YouTube, X, Instagram, SoundCloud, Facebook ou LinkedIn.",
+    "downloadFromInternetPlaceholder": "https://…"
+  },
+  "operations": {
+    "cutOperationDesc": "Remova uma parte do meio",
+    "trimOperationDesc": "Remova das pontas",
+    "spleeterOperationDesc": "Separe o vocal da música",
+    "compressOperationDesc": "Arquivo menor, qualidade semelhante",
+    "convertOperationDesc": "Mude o formato de saída",
+    "qualityOperationDesc": "Reduza qualidade e tamanho",
+    "cutOperation": "Cortar",
+    "trimOperation": "Separar",
+    "compressOperation": "Comprimir",
+    "compressTip": "32% é o ponto ideal (menor tamanho do arquivo + muito pouca mudança de qualidade)",
+    "convertToAudioOperation": "Vídeo para Áudio",
+    "convertOperation": "Converter Áudio/Vídeo",
+    "qualityOperation": "Qualidade do vídeo",
+    "convertToVideoOperation": "Áudio para Vídeo",
+    "uploadImageBtn": "Escolher arquivo",
+    "convertBtn": "Converter",
+    "cutBtn": "Cortar",
+    "cutOutputDuration": "Duração do arquivo de saída",
+    "cutPreview": "Prévia",
+    "startBtn": "Iniciar",
+    "trimBtn": "Separar"
+  },
+  "formatSelect": {
+    "placeholder": "Escolha um formato",
+    "label": "Formato de saída",
+    "recommended": "(recomendado)"
+  },
+  "qualitySelect": {
+    "selectLabel": "Selecionar qualidade",
+    "high": "Alta qualidade",
+    "medium": "Média qualidade",
+    "low": "Baixa qualidade"
+  },
+  "executeBtn": {
+    "outputFile": "Arquivo:"
+  },
+  "updater": {
+    "updaterTitle": "Nova atualização disponível!",
+    "okLabel": "Atualizar",
+    "cancelLabel": "Não, obrigado",
+    "updaterMessage": "Atualize o TAIF para obter as últimas mudanças, como melhorias de performance, correções de bugs e muito mais"
+  },
+  "noUpdate": {
+    "message": "TAIF está atualizado",
+    "okLabel": "Ok"
+  },
+  "errorBoundary": {
+    "title": "Algo correu mal",
+    "desc": "O TAIF encontrou um problema inesperado. Os seus ficheiros originais não foram alterados.",
+    "reset": "Voltar ao início"
+  },
+  "workspace": {
+    "tagline": "O seu média, à sua maneira.",
+    "footer": "Todo o processamento é feito localmente quando suportado.",
+    "reviewStep": "01 · REVISÃO",
+    "reviewTitle": "O seu ficheiro está pronto.",
+    "reviewDesc": "Reveja os detalhes e escolha o que quer fazer.",
+    "replaceFile": "Substituir ficheiro",
+    "chooseOperation": "Escolher operação",
+    "toolsStep": "02 · ESCOLHER FERRAMENTA",
+    "toolsTitle": "O que deve o TAIF fazer?",
+    "toolsDesc": "Cada ferramenta cria um novo resultado. O original não é alterado.",
+    "configStep": "03 · CONFIGURAR",
+    "back": "Voltar",
+    "reset": "Recomeçar",
+    "duration": "Duração",
+    "size": "Tamanho",
+    "format": "Formato",
+    "type": "Tipo",
+    "video": "Vídeo",
+    "audio": "Áudio",
+    "image": "Imagem",
+    "summary": "RESUMO DO RESULTADO",
+    "destination": "Destino",
+    "preserved": "Original preservado",
+    "yes": "Sim",
+    "summaryNote": "O tamanho final e o tempo dependem do ficheiro e do dispositivo.",
+    "trimField": "Manter este intervalo",
+    "cutField": "Remover este intervalo",
+    "compressField": "Nível de compressão"
+  },
+  "opDetails": {
+    "quality": "Escolha uma qualidade de saída inferior. As opções dependem do ficheiro.",
+    "spleeter": "Crie uma versão focada na fala separando a voz da música.",
+    "trim": "Mantenha apenas o intervalo entre o início e o fim.",
+    "cut": "Remova a secção central selecionada e una o restante.",
+    "compress": "Escolha um equilíbrio entre tamanho e qualidade.",
+    "convert": "Escolha um formato de destino disponível."
+  },
+  "result": {
+    "processingEyebrow": "A PROCESSAR LOCALMENTE",
+    "inProgress": "{{op}} em curso",
+    "working": "O TAIF está a trabalhar em {{name}}. Mantenha a app aberta.",
+    "preparing": "A preparar resultado",
+    "completeEyebrow": "CONCLUÍDO",
+    "readyTitle": "O seu média está pronto.",
+    "completedBody": "{{op}} concluído com sucesso. O original não foi alterado.",
+    "another": "Processar outro ficheiro",
+    "errorEyebrow": "NÃO FOI POSSÍVEL CONCLUIR",
+    "tryAgain": "Tentar novamente",
+    "backToStart": "Voltar ao início",
+    "details": "DETALHES"
+  }
+}

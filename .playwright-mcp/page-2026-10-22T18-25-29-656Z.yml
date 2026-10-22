@@ -1,0 +1,25 @@
+- generic [ref=f2e2]:
+  - banner [ref=f2e3]:
+    - generic [ref=f2e5]:
+      - img "TAIF" [ref=f2e6]
+      - generic [ref=f2e7]: TAIF
+      - generic [ref=f2e8]: طَيْف
+    - generic [ref=f2e9]:
+      - button "Operations log" [ref=f2e10] [cursor=pointer]:
+        - img "Operations log" [ref=f2e11]
+      - button "Settings" [ref=f2e15] [cursor=pointer]:
+        - img "Settings" [ref=f2e16]
+  - region "Notifications alt+T"
+  - main [ref=f2e18]:
+    - generic [ref=f2e20]:
+      - img "TAIF" [ref=f2e21]
+      - paragraph [ref=f2e22]: Import an audio, video or image file to get started.
+      - button "Choose a file Drag & drop your file anywhere in this window, or press Ctrl + O" [ref=f2e23] [cursor=pointer]:
+        - generic [ref=f2e28]: Choose a file
+        - generic [ref=f2e29]: Drag & drop your file anywhere in this window, or press Ctrl + O
+      - generic [ref=f2e30]:
+        - separator [ref=f2e31]
+        - paragraph [ref=f2e32]: Or
+        - separator [ref=f2e33]
+      - button [ref=f2e34] [cursor=pointer]:
+        - paragraph [ref=f2e35]: Download from URL
