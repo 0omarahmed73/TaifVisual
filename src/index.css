@@ -204,3 +204,90 @@ input[type="range"]::-moz-range-thumb {
   cursor: pointer;
   box-shadow: 0 0 0 2.5px hsl(var(--background));
 }
+
+/* ---- Launch splash ------------------------------------------------------ */
+.splash {
+  transition: opacity 420ms cubic-bezier(0.4, 0, 0.2, 1), transform 420ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.splash[data-leaving="true"] {
+  opacity: 0;
+  transform: scale(1.04);
+  pointer-events: none;
+}
+.splash-glow {
+  position: absolute;
+  width: 22rem;
+  height: 22rem;
+  border-radius: 9999px;
+  background: radial-gradient(
+    closest-side,
+    hsl(var(--spectra-mid) / 0.28),
+    hsl(var(--spectra-start) / 0.12) 55%,
+    transparent 75%
+  );
+  filter: blur(8px);
+  opacity: 0;
+  animation: splash-glow-in 900ms 150ms cubic-bezier(0.22, 1, 0.36, 1) forwards,
+    splash-breathe 2.6s 1.05s ease-in-out infinite;
+}
+.splash-mark {
+  position: relative;
+  overflow: visible;
+  animation: splash-float 3.2s 1.2s ease-in-out infinite;
+}
+.splash-band {
+  transform-box: fill-box;
+  transform-origin: 50% 0%;
+  opacity: 0;
+  animation: splash-band-in 760ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(180ms + var(--i) * 130ms);
+}
+.splash-word {
+  opacity: 0;
+  transform: translateY(10px);
+  letter-spacing: 0.02em;
+  animation: splash-rise 700ms 720ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.splash-track {
+  position: relative;
+  width: 9rem;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 9999px;
+  background: hsl(var(--border));
+  opacity: 0;
+  animation: splash-fade 400ms 900ms ease-out forwards;
+}
+.splash-track span {
+  position: absolute;
+  inset: 0;
+  width: 45%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    hsl(var(--spectra-start)),
+    hsl(var(--spectra-mid)),
+    hsl(var(--spectra-end))
+  );
+  animation: splash-sweep 1.2s 900ms cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+@keyframes splash-band-in {
+  from { opacity: 0; transform: scaleY(0.05) translateY(-6px); }
+  60%  { opacity: 1; }
+  to   { opacity: 1; transform: scaleY(1) translateY(0); }
+}
+@keyframes splash-glow-in { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes splash-breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.08); opacity: 0.8; } }
+@keyframes splash-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes splash-rise { to { opacity: 1; transform: translateY(0); letter-spacing: 0.02em; } }
+@keyframes splash-fade { to { opacity: 1; } }
+@keyframes splash-sweep { from { transform: translateX(-100%); } to { transform: translateX(230%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash, .splash-glow, .splash-mark, .splash-band, .splash-word, .splash-track, .splash-track span {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}

@@ -21,6 +21,8 @@ import { Upload } from "lucide-react";
 import { cn } from "@/utils/cn";
 
 import { useTauriDragDrop } from "@/hooks/useTauriDragDrop";
+import { isAndroid } from "@/utils/platform";
+import { pickMediaFile } from "@/engine/android";
 import { Eyebrow } from "@/components/ui/Stage";
 import OnBoardDialog from "./OnBoardDialog";
 import DownloadFromInternet from "./DownloadFromInternet";
@@ -78,6 +80,12 @@ function FileUpload() {
 
   // Existing file-picker flow (also available via Ctrl/Cmd + O).
   const onFileUpload = useCallback(async function onFileUpload() {
+    if (isAndroid()) {
+      // Android: system document picker; the chosen file is copied to app cache.
+      const picked = await pickMediaFile("media");
+      if (picked) await handleImportPath(picked);
+      return;
+    }
     const selectedFile = await open({
       multiple: false,
       filters: [
@@ -125,9 +133,9 @@ function FileUpload() {
   return (
     <main>
       <OnBoardDialog />
-      <div className="flex min-h-screen flex-col items-center justify-center px-9 pb-[29px] pt-[61px] text-center">
+      <div className="flex min-h-screen flex-col items-center justify-center px-5 pb-[29px] pt-[61px] sm:px-9 text-center">
         <Eyebrow>{t("uploadPage.eyebrow")}</Eyebrow>
-        <h1 className="mt-2 text-[32px] font-extrabold leading-[1.15] tracking-[-0.04em] [&:lang(ar)]:tracking-normal">
+        <h1 className="mt-2 text-[26px] font-extrabold sm:text-[32px] leading-[1.15] tracking-[-0.04em] [&:lang(ar)]:tracking-normal">
           {t("uploadPage.title")}
         </h1>
         <p className="mt-2 max-w-[500px] text-sm leading-relaxed text-muted-foreground">
@@ -149,10 +157,12 @@ function FileUpload() {
             <Upload className="h-[22px] w-[22px]" strokeWidth={1.8} />
           </span>
           <b className="text-[15px] font-bold">
-            {isDragOver ? t("uploadPage.dropNow") : t("uploadPage.dropTitle")}
+            {isDragOver
+              ? t("uploadPage.dropNow")
+              : t(isAndroid() ? "uploadPage.dropTitleMobile" : "uploadPage.dropTitle")}
           </b>
           <small className="mt-1.5 max-w-[400px] truncate px-4 text-xs text-muted-foreground">
-            {t("uploadPage.dropSub")}
+            {t(isAndroid() ? "uploadPage.dropSubMobile" : "uploadPage.dropSub")}
           </small>
           <em className="mt-4 text-[10px] font-semibold not-italic tracking-[0.12em] text-muted-foreground/70 [&:lang(ar)]:tracking-normal">
             {t("uploadPage.formats")}

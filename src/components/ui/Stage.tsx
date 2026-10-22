@@ -77,10 +77,10 @@ export function StageHead({
   extra?: ReactNode;
 }) {
   return (
-    <header className="mb-6 flex items-start justify-between gap-5">
+    <header className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:gap-5">
       <div className="min-w-0 text-start">
         <Eyebrow>{step}</Eyebrow>
-        <h1 className="mt-2 text-[27px] font-extrabold leading-[1.15] tracking-[-0.04em] [&:lang(ar)]:tracking-normal">
+        <h1 className="mt-2 text-[24px] sm:text-[27px] font-extrabold leading-[1.15] tracking-[-0.04em] [&:lang(ar)]:tracking-normal">
           {title}
         </h1>
         <p className="mt-1.5 max-w-[500px] text-sm leading-relaxed text-muted-foreground">
@@ -101,7 +101,7 @@ export function MiniFile({
   meta: string;
 }) {
   return (
-    <aside className="flex min-w-[205px] max-w-[280px] items-center gap-2.5 rounded-[9px] border border-border bg-card px-3 py-2.5 text-[hsl(var(--spectra-end))]">
+    <aside className="flex w-full min-w-[205px] max-w-[280px] sm:w-auto items-center gap-2.5 rounded-[9px] border border-border bg-card px-3 py-2.5 text-[hsl(var(--spectra-end))]">
       <FileText className="h-[18px] w-[18px] shrink-0" />
       <span className="flex min-w-0 flex-col gap-0.5 text-start text-foreground">
         <b className="truncate text-xs font-semibold" dir="auto">

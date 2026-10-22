@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fully transparent: the system splash is just the dark canvas; the animated logo is drawn by the web UI. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#00000000" />
+    <size android:width="48dp" android:height="48dp" />
+</shape>

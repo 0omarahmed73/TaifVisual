@@ -34,3 +34,9 @@ src-tauri/bin/*-apple-darwin
 src-tauri/bin/SpleeterExe-x86_64-unknown-linux-gnu
 src-tauri/bin/ytDlp-x86_64-unknown-linux-gnu
 
+
+# Built APKs
+release/
+
+# Local test media
+test-audio/

@@ -90,7 +90,7 @@ function Operation() {
   if (!meta) return null;
 
   return (
-    <main className="mx-auto min-h-screen w-full max-w-[920px] px-[45px] pb-[61px] pt-[calc(61px+34px)]">
+    <main className="mx-auto min-h-screen w-full max-w-[920px] px-4 pb-[61px] sm:px-[45px] pt-[calc(61px+34px)]">
       <div className="animate-in fade-in-0 slide-in-from-bottom-1 duration-300">
         <StageHead
           step={t("workspace.configStep")}

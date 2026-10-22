@@ -6,12 +6,14 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOperationStore } from "@/stores/useOperationStore";
 import { resetWorkspace } from "@/utils/resetWorkspace";
+import { isAndroid } from "@/utils/platform";
 import { useFileStore } from "@/stores/useFileStore";
 
 import LanguageSelect from "./LanguageSelect";
 import { ModeToggle } from "./ModeToggle";
 import NotficationPromptBtn from "./NotficationPromptBtn";
 import OutputDirRow from "./OutputDirRow";
+import { AboutDialog } from "./AboutDialog";
 import { Brand } from "@/components/ui/Brand";
 import { Btn } from "@/components/ui/Stage";
 import {
@@ -34,10 +36,11 @@ import { toast } from "sonner";
 import { SettingsRow } from "./SettingsRow";
 
 const iconBtn =
-  "flex h-[33px] w-[33px] items-center justify-center rounded-lg border border-transparent text-foreground transition-colors hover:border-border hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+  "flex h-10 w-10 items-center sm:h-[33px] sm:w-[33px] justify-center rounded-lg border border-transparent text-foreground transition-colors hover:border-border hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 const iconProps = { size: 16, strokeWidth: 1.8 } as const;
 
 function Header() {
+  const onAndroid = isAndroid();
   const [updateChecking, setUpdateChecking] = useState<boolean | null>(null);
   const [updateDownloading, setUpdateDownloading] = useState<boolean | null>(
     null,
@@ -81,7 +84,7 @@ function Header() {
 
   return (
     <header
-      className="fixed top-0 z-30 flex h-[61px] w-full items-center justify-between gap-3 border-b border-border bg-appbar px-[22px]"
+      className="fixed top-0 z-30 flex h-[61px] w-full items-center justify-between gap-3 border-b border-border bg-appbar px-4 sm:px-[22px]"
       dir={i18n.dir()}
     >
       <div className="flex items-center">
@@ -157,6 +160,7 @@ function Header() {
           </DialogContent>
         </Dialog>
 
+        <AboutDialog triggerClassName={iconBtn} />
         <Dialog>
           <DialogTrigger
             aria-label={t("settingsBtnTitle")}
@@ -182,8 +186,9 @@ function Header() {
             <div className="overflow-hidden rounded-xl border border-border bg-background/40">
               <LanguageSelect />
               <ModeToggle />
-              <OutputDirRow />
+              {!onAndroid && <OutputDirRow />}
               <NotficationPromptBtn />
+              {!onAndroid && (
               <SettingsRow
                 icon={<Download />}
                 title={t("header.settings.updates")}
@@ -204,6 +209,7 @@ function Header() {
                     t("header.settings.checkNow")}
                 </button>
               </SettingsRow>
+              )}
             </div>
           </DialogContent>
         </Dialog>

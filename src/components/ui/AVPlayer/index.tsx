@@ -1,4 +1,6 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
+import { appCacheDir, join } from "@tauri-apps/api/path";
+import { mkdir } from "@tauri-apps/plugin-fs";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -9,6 +11,10 @@ import formatTimestamp from "@/utils/timestampFormatter";
 import { getPlatformName } from "@/utils/tauriEnv";
 import { cn } from "@/utils/cn";
 import { toast } from "sonner";
+import { ffmpeg, ffprobe } from "@/utils/command";
+import { extractFFmpegProgress } from "@/utils/ffmpegHelperUtils";
+import { isAndroid } from "@/utils/platform";
+import { fileTitleSync } from "@/utils/fsUtils";
 
 import AVControls from "./AVControls";
 import CutSlider from "./CutSlider";
@@ -29,6 +35,9 @@ export default function AVPlayer({
   const [AVPaused, setAVPaused] = useState(true);
   const [AVCurrDurationPer, setAVCurrDurationPer] = useState(0);
   const [playerSrc, setPlayerSrc] = useState<string>("");
+  const [previewState, setPreviewState] = useState<"idle" | "working" | "failed">("idle");
+  const [previewPercent, setPreviewPercent] = useState(0);
+  const proxyTried = useRef(false);
 
   const { t } = useTranslation();
   const { duration: initialAVDuration, filePath } = useFileStore();
@@ -48,6 +57,8 @@ export default function AVPlayer({
      */
     let objectUrl: string | null = null;
     let cancelled = false;
+    proxyTried.current = false;
+    setPreviewState("idle");
 
     async function resolvePlayerSource() {
       setPlayerSrc("");
@@ -79,6 +90,68 @@ export default function AVPlayer({
       cancelled = true;
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
+  }, [filePath]);
+
+  /**
+   * Android's WebView cannot decode some codecs (notably the HEVC/H.265 clips
+   * phones record). Build a small H.264 copy used only for the preview; the
+   * edit itself still runs on the original file.
+   */
+  async function buildPreviewProxy() {
+    if (!isAndroid() || proxyTried.current) return;
+    proxyTried.current = true;
+    setPreviewState("working");
+    try {
+      const dir = await join(await appCacheDir(), "previews");
+      await mkdir(dir, { recursive: true }).catch(() => undefined);
+      const out = await join(dir, `${fileTitleSync(filePath)}_${Date.now()}.mp4`);
+      const command = ffmpeg([
+        "-y", "-i", filePath,
+        "-vf", "scale=-2:480",
+        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "30",
+        "-pix_fmt", "yuv420p",
+        "-c:a", "aac", "-b:a", "96k",
+        "-movflags", "+faststart",
+        out,
+      ]);
+      setPreviewPercent(0);
+      command.stderr.on("data", (line) => {
+        const percent = extractFFmpegProgress(line, initialAVDuration);
+        if (percent !== undefined) setPreviewPercent(Math.min(99, Math.trunc(percent)));
+      });
+      command.on("close", ({ code }) => {
+        if (code === 0) {
+          setPlayerSrc(convertFileSrc(out));
+          setPreviewState("idle");
+        } else setPreviewState("failed");
+      });
+      command.on("error", () => setPreviewState("failed"));
+      await command.spawn();
+    } catch (err) {
+      console.error("Preview copy failed:", err);
+      setPreviewState("failed");
+    }
+  }
+
+  // Probe the codec first so unsupported videos get their preview copy right away
+  useEffect(() => {
+    if (!isAndroid() || isAudio) return;
+    let stopped = false;
+    const probe = ffprobe([
+      "-v", "error", "-select_streams", "v:0",
+      "-show_entries", "stream=codec_name", "-of", "csv=p=0", filePath,
+    ]);
+    probe.stdout.on("data", (line) => {
+      const codec = line.trim().toLowerCase();
+      // Codecs Android's WebView decodes everywhere
+      const playable = ["h264", "vp8", "vp9", "mpeg4", "av1"].includes(codec);
+      if (!stopped && codec && !playable) void buildPreviewProxy();
+    });
+    probe.spawn().catch(() => undefined);
+    return () => {
+      stopped = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filePath]);
 
   useEffect(() => {
@@ -200,8 +273,30 @@ export default function AVPlayer({
               onPause={() => setAVPaused(true)}
               onError={(e) => {
                 console.error("Video load failed:", e.currentTarget.error, e.currentTarget.currentSrc);
+                void buildPreviewProxy();
               }}
             />
+            {previewState !== "idle" && (
+              <div
+                role="status"
+                className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/75 p-4 text-center text-sm text-white"
+              >
+                {previewState === "working" && (
+                  <>
+                    <span className="h-6 w-6 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                    <span>{t("workspace.preparingPreview")}</span>
+                    <span className="h-1.5 w-40 overflow-hidden rounded-full bg-white/20">
+                      <span
+                        className="block h-full rounded-full bg-spectra transition-[width] duration-300"
+                        style={{ width: `${previewPercent}%` }}
+                      />
+                    </span>
+                    <span className="text-xs text-white/70">{previewPercent}%</span>
+                  </>
+                )}
+                {previewState === "failed" && t("workspace.previewUnavailable")}
+              </div>
+            )}
           </div>
         )}
       </div>

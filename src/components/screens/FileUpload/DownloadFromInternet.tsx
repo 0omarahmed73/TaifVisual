@@ -1,5 +1,6 @@
-import { downloadDir, join } from "@tauri-apps/api/path";
-import { Command } from "@tauri-apps/plugin-shell";
+import { join } from "@tauri-apps/api/path";
+import { ytDlp } from "@/utils/command";
+import { getDownloadTempDir } from "@/utils/platformPaths";
 import { readDir, stat } from "@tauri-apps/plugin-fs";
 
 import { getIsAudio, getIsImage, formatFileSize } from "@/utils/fsUtils";
@@ -116,7 +117,7 @@ function DownloadFromInternet() {
     lastPolledSize.current = 0;
     cancelRequestedRef.current = false;
 
-    const downloadPath = await downloadDir();
+    const downloadPath = await getDownloadTempDir();
 
     // Independent progress source: poll the growing .part file yt-dlp
     // leaves in the downloads folder, in case stream events lag.
@@ -178,7 +179,7 @@ function DownloadFromInternet() {
           : "bestvideo[height<=360]+bestaudio",
       );
 
-    const ytDlpSidecar = Command.sidecar("bin/ytDlp", ytDlpCmd);
+    const ytDlpSidecar = ytDlp(ytDlpCmd);
 
     let downloadedFilePath: string | null = null;
     let isStdoutProcessed = false;

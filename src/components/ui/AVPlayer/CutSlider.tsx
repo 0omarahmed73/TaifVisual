@@ -26,7 +26,7 @@ export default function CutSlider({
           (value[1] / 100) * initialAVDuration,
         ]);
 
-        if (!AVEl) return;
+        if (!AVEl || !Number.isFinite(initialAVDuration)) return;
         if (cutType === "trim") {
           AVEl.currentTime = (value[0] / 100) * initialAVDuration;
         } else {

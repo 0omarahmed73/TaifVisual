@@ -26,12 +26,14 @@ import { ensureDir, getIsAudio } from "@/utils/fsUtils";
 
 import { createPortal } from "react-dom";
 import { toast } from "sonner";
-import { Check, FileText, FolderOpen, RefreshCw, TriangleAlert } from "lucide-react";
+import { Check, FileText, FolderOpen, RefreshCw, Share2, TriangleAlert } from "lucide-react";
 
 import { makeOutputUniqueId, operationMeta } from "@/utils/operations";
 import { fileTitleSync, extNameSync } from "@/utils/fsUtils";
 import { resetWorkspace } from "@/utils/resetWorkspace";
 import { getOutputDirPref } from "@/utils/outputDirPref";
+import { isAndroid } from "@/utils/platform";
+import { openSavedOutput } from "@/engine/android";
 import { TaifMark } from "./Brand";
 import { Btn, Eyebrow } from "./Stage";
 
@@ -109,10 +111,20 @@ function ExecuteBtn({
     setLogs,
     outputId,
     setOutputId,
+    savedOutput,
   } = useOperationStore();
 
   useEffect(() => {
     setActionsSlot(document.getElementById("stage-actions"));
+  }, []);
+
+  // Android Back button: dismiss the result view (ignored while processing)
+  useEffect(() => {
+    const dismiss = () => {
+      if (!useOperationStore.getState().cmdProcessing) setShowResult(false);
+    };
+    window.addEventListener("taif-overlay-back", dismiss);
+    return () => window.removeEventListener("taif-overlay-back", dismiss);
   }, []);
 
   async function onStartBtnClick() {
@@ -147,15 +159,20 @@ function ExecuteBtn({
       outputFileBasename,
     );
     const isAudio = getIsAudio(tempFilePath);
-    const finalDir =
-      getOutputDirPref() ||
-      (isAudio
-        ? await audioDir()
-        : isImage
-          ? await pictureDir()
-          : await videoDir());
+    // Android publishes to the media library via MediaStore (see
+    // copyTmpMediaToMediaDir), so there is no app-visible target folder.
+    const finalDir = isAndroid()
+      ? ""
+      : getOutputDirPref() ||
+        (isAudio
+          ? await audioDir()
+          : isImage
+            ? await pictureDir()
+            : await videoDir());
 
-    const finalPath = await join(finalDir, outputFileBasename);
+    const finalPath = isAndroid()
+      ? tempFilePath
+      : await join(finalDir, outputFileBasename);
 
     setOutputPath(finalPath);
     setOutputDir(finalDir);
@@ -196,10 +213,18 @@ function ExecuteBtn({
   }, [errInfo, t, cmdStatus]);
 
   async function openOutputPath() {
+    if (isAndroid() && savedOutput) {
+      openSavedOutput(savedOutput);
+      return;
+    }
     await open(outputPath);
   }
 
   async function openOutputDir() {
+    if (isAndroid() && savedOutput) {
+      openSavedOutput(savedOutput, true);
+      return;
+    }
     await open(outputDir);
   }
 
@@ -217,7 +242,10 @@ function ExecuteBtn({
 
   const opName = t(operationMeta[operationType as OperationType]?.labelKey ?? "");
   const sourceName = `${fileTitleSync(filePath)}.${extNameSync(filePath)}`;
-  const outputName = outputPath.split(/[\\/]/).pop() ?? "";
+  const onAndroid = isAndroid();
+  const outputName =
+    savedOutput?.name || (outputPath.split(/[\\/]/).pop() ?? "");
+  const outputLocation = savedOutput?.location || outputDir;
   const percent = Math.min(100, Math.trunc(progress));
   const isError = cmdStatus === "error";
 
@@ -298,7 +326,7 @@ function ExecuteBtn({
             </p>
             <div
               dir={i18n.dir()}
-              className="mb-2 mt-[22px] flex w-[590px] max-w-[90%] flex-wrap items-center gap-3 rounded-[11px] border border-border bg-card p-3"
+              className="mb-2 mt-[22px] flex w-[590px] max-w-[92%] flex-col items-stretch gap-3 rounded-[11px] border border-border bg-card p-3 sm:flex-row sm:items-center"
             >
               <div className="flex min-w-0 flex-1 items-center gap-2.5 text-start">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-[hsl(var(--spectra-end))]">
@@ -311,18 +339,24 @@ function ExecuteBtn({
                   <small
                     className="truncate text-[11px] text-muted-foreground"
                     dir="ltr"
-                    title={outputDir}
+                    title={outputLocation}
                   >
-                    {outputDir}
+                    {outputLocation}
                   </small>
                 </span>
               </div>
-              <div className="flex gap-1.5">
+              <div className="flex gap-1.5 [&>button]:flex-1 sm:[&>button]:flex-none">
                 <Btn
                   onClick={openOutputDir}
-                  icon={<FolderOpen className="h-[15px] w-[15px]" strokeWidth={1.8} />}
+                  icon={
+                    onAndroid ? (
+                      <Share2 className="h-[15px] w-[15px]" strokeWidth={1.8} />
+                    ) : (
+                      <FolderOpen className="h-[15px] w-[15px]" strokeWidth={1.8} />
+                    )
+                  }
                 >
-                  {t("executeBtn.outputDir")}
+                  {onAndroid ? t("result.share") : t("executeBtn.outputDir")}
                 </Btn>
                 <Btn kind="secondary" onClick={openOutputPath}>
                   {t("executeBtn.outputFile")}
@@ -404,7 +438,7 @@ function ExecuteBtn({
 /** Full-window state view that sits between the app bar and footer strip. */
 function StageOverlay({ children }: { children: React.ReactNode }) {
   return (
-    <div className="fixed inset-x-0 bottom-[29px] top-[61px] z-40 overflow-auto bg-background">
+    <div data-stage-overlay className="fixed inset-x-0 bottom-[29px] top-[61px] z-40 overflow-auto bg-background">
       <div className="flex min-h-full animate-in flex-col items-center justify-center p-9 text-center duration-200 fade-in-0">
         {children}
       </div>

@@ -1,4 +1,5 @@
-import { Child } from "@tauri-apps/plugin-shell";
+import type { ProcessHandle } from "@/engine/types";
+import type { SavedOutput } from "@/engine/android";
 import { create } from "zustand";
 
 export enum OperationType {
@@ -15,12 +16,14 @@ type State = {
   operationType: OperationType | null;
   cmdProcessing: boolean;
   logs: string[];
-  process: Child | null;
+  process: ProcessHandle | null;
   workspaceStep: "review" | "tools";
   /** Destination format chosen on the Convert screen (for the summary). */
   outputFormat: string | null;
   /** Unique suffix shared by the summary and the real output file name. */
   outputId: string | null;
+  /** Android only: where the finished file was published. */
+  savedOutput: SavedOutput | null;
 };
 
 type Action = {
@@ -30,6 +33,7 @@ type Action = {
   setProcess: (process: State["process"]) => void;
   setWorkspaceStep: (step: State["workspaceStep"]) => void;
   setOutputFormat: (format: State["outputFormat"]) => void;
+  setSavedOutput: (output: State["savedOutput"]) => void;
   setOutputId: (id: State["outputId"]) => void;
 };
 
@@ -41,6 +45,8 @@ export const useOperationStore = create<State & Action>((set) => ({
   process: null,
   workspaceStep: "review",
   outputFormat: null,
+  savedOutput: null,
+  setSavedOutput: (output) => set(() => ({ savedOutput: output })),
   outputId: null,
   setOutputFormat: (format) => set(() => ({ outputFormat: format })),
   setOutputId: (id) => set(() => ({ outputId: id })),

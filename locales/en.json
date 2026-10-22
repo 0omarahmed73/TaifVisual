@@ -84,7 +84,9 @@
     "formats": "COMMON AUDIO, VIDEO & IMAGE FILES",
     "urlEyebrow": "IMPORT FROM URL",
     "urlTitle": "Download supported media",
-    "urlDesc": "Paste a link from YouTube, X, Instagram, SoundCloud, Facebook or LinkedIn."
+    "urlDesc": "Paste a link from YouTube, X, Instagram, SoundCloud, Facebook or LinkedIn.",
+    "dropTitleMobile": "Choose a file",
+    "dropSubMobile": "Tap to pick from your phone"
   },
   "operations": {
     "previewImage": "Preview Image",
@@ -190,7 +192,9 @@
     "summaryNote": "Final size and time depend on the source and device.",
     "trimField": "Keep this range",
     "cutField": "Remove this range",
-    "compressField": "Compression level"
+    "compressField": "Compression level",
+    "preparingPreview": "Preparing a preview of this video…",
+    "previewUnavailable": "This video can't be previewed here, but you can still set the range with the slider."
   },
   "opDetails": {
     "quality": "Choose a lower output quality. Options depend on the source file.",
@@ -212,6 +216,14 @@
     "errorEyebrow": "COULDN'T COMPLETE",
     "tryAgain": "Try again",
     "backToStart": "Back to start",
-    "details": "DETAILS"
+    "details": "DETAILS",
+    "share": "Share"
+  },
+  "about": {
+    "title": "About",
+    "role": "Full Stack Developer",
+    "website": "Website",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
   }
 }

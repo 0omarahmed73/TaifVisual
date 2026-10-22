@@ -113,7 +113,8 @@ function AVControls({
     if (sliderElRef.current) {
       sliderElRef.current.value = String(currentValue);
     }
-    AVElRef.current.currentTime = timeInSeconds;
+    // The element reports NaN until metadata loads (e.g. an unsupported codec)
+    if (Number.isFinite(timeInSeconds)) AVElRef.current.currentTime = timeInSeconds;
   }
 
   // Played portion of the timeline, shown as a solid spectral fill.

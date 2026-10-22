@@ -3,6 +3,7 @@ import { audioDir, pictureDir, videoDir } from "@tauri-apps/api/path";
 
 import { MediaType } from "@/stores/useFileStore";
 import { isTauriRuntime } from "@/utils/tauriEnv";
+import { isAndroid } from "@/utils/platform";
 import { getOutputDirPref, OUTPUT_DIR_CHANGED_EVENT } from "@/utils/outputDirPref";
 
 /**
@@ -28,6 +29,17 @@ export function useOutputDir(
   useEffect(() => {
     let cancelled = false;
     async function load() {
+      if (isAndroid()) {
+        // Android publishes to the shared media library (see saveOutputFile).
+        const folder =
+          outputIsAudio || mediaType === MediaType.AUDIO
+            ? "Music"
+            : mediaType === MediaType.IMAGE
+              ? "Pictures"
+              : "Movies";
+        if (!cancelled) setDir(`${folder} / TAIF`);
+        return;
+      }
       if (!isTauriRuntime() || prefDir) return;
       try {
         const path =

@@ -24,7 +24,7 @@ const mediaTypeKey = {
 function Workspace() {
   const step = useOperationStore((s) => s.workspaceStep);
   return (
-    <main className="mx-auto min-h-screen w-full max-w-[920px] px-[45px] pb-[61px] pt-[calc(61px+34px)]">
+    <main className="mx-auto min-h-screen w-full max-w-[920px] px-4 pb-[61px] sm:px-[45px] pt-[calc(61px+34px)]">
       {step === "review" ? <Review /> : <Tools />}
     </main>
   );
@@ -171,7 +171,7 @@ function Tools() {
           />
         }
       />
-      <div className="grid grid-cols-2 gap-[9px] md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-[9px] min-[520px]:grid-cols-2 md:grid-cols-3">
         {available.map((type) => {
           const meta = operationMeta[type]!;
           return (

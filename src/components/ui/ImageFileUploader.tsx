@@ -1,5 +1,7 @@
 import { convertFileSrc } from "@tauri-apps/api/core";
 import { open } from "@tauri-apps/plugin-dialog";
+import { isAndroid } from "@/utils/platform";
+import { pickMediaFile } from "@/engine/android";
 import { ImagePlus, X } from "lucide-react";
 
 import { useTranslation } from "react-i18next";
@@ -16,6 +18,11 @@ function ImageFileUploader({
   const { t } = useTranslation();
 
   async function onUploadImageBtnClick() {
+    if (isAndroid()) {
+      const picked = await pickMediaFile("image");
+      if (picked) setImageFilePath(picked);
+      return;
+    }
     const selectedImageFile = await open({
       multiple: false,
       filters: [

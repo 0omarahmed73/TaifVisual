@@ -71,12 +71,33 @@ const getMediaDuration = async (filePath: string): Promise<number> => {
 
   const ffprobeSidecar = ffprobeCommand(durationCmd);
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    let settled = false;
     ffprobeSidecar.stdout.on("data", (data) => {
       const mediaDuration = parseFloat(data.toString());
+      if (settled || Number.isNaN(mediaDuration)) return;
+      settled = true;
       resolve(mediaDuration);
     });
-    ffprobeSidecar.spawn();
+    // Without these, a failing ffprobe left the import waiting forever.
+    ffprobeSidecar.on("close", ({ code }) => {
+      if (!settled) {
+        settled = true;
+        reject(new Error(`ffprobe could not read the file (exit ${code})`));
+      }
+    });
+    ffprobeSidecar.on("error", (error) => {
+      if (!settled) {
+        settled = true;
+        reject(new Error(String(error)));
+      }
+    });
+    ffprobeSidecar.spawn().catch((error) => {
+      if (!settled) {
+        settled = true;
+        reject(error);
+      }
+    });
   });
 };
 

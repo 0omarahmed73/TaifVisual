@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { join, appLocalDataDir } from "@tauri-apps/api/path";
 import { remove } from "@tauri-apps/plugin-fs";
-import { Command } from "@tauri-apps/plugin-shell";
+import { spleeter } from "@/utils/command";
 
 import { deleteMediaTemp, ensureDir } from "@/utils/fsUtils";
 import { SpleeterHelper } from "@/utils/SpleeterHelper";
@@ -53,7 +53,7 @@ function useSpleeter() {
 
     setLogs(`File duration: ${duration}`);
 
-    const spleeterSidecar = Command.sidecar("bin/SpleeterExe", [
+    const spleeterSidecar = spleeter([
       preprocessedInputFilePath,
       outputPcmFilePath,
       duration.toString(),

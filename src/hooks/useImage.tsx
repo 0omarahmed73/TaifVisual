@@ -7,6 +7,8 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useOperationStore } from "@/stores/useOperationStore";
+import { isAndroid } from "@/utils/platform";
+import { copyTmpMediaToMediaDir } from "@/utils/fsUtils";
 
 function useImage() {
   const { t } = useTranslation();
@@ -41,6 +43,8 @@ function useImage() {
       quality: quality,
     })
       .then(async () => {
+        // Android writes to a temp file first, then publishes to the gallery.
+        if (isAndroid()) await copyTmpMediaToMediaDir(outputPath);
         clearInterval(progressInterval);
         setProgress(100);
         setCmdStatus("success");

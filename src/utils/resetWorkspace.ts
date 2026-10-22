@@ -13,5 +13,6 @@ export function resetWorkspace() {
   operation.setOperationType(null);
   operation.setWorkspaceStep("review");
   operation.setOutputFormat(null);
+  operation.setSavedOutput(null);
   operation.setOutputId(null);
 }

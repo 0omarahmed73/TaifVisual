@@ -8,6 +8,9 @@ import {
 } from "@tauri-apps/plugin-fs";
 
 import { getOutputDirPref } from "@/utils/outputDirPref";
+import { isAndroid } from "@/utils/platform";
+import { saveOutputFile } from "@/engine/android";
+import { useOperationStore } from "@/stores/useOperationStore";
 
 export function formatFileSize(sizeInBytes: number): string {
   if (sizeInBytes === 0) return "0 Bytes";
@@ -79,6 +82,13 @@ export async function deleteMediaTemp() {
 }
 
 export async function copyTmpMediaToMediaDir(file: string) {
+  if (isAndroid()) {
+    // Publish to Movies / Music / Pictures ▸ TAIF through MediaStore.
+    const saved = await saveOutputFile(file);
+    useOperationStore.getState().setSavedOutput(saved);
+    await deleteMediaTemp();
+    return;
+  }
   const isAudio = getIsAudio(file);
   const mediaDirPath = await join(
     getOutputDirPref() || (isAudio ? await audioDir() : await videoDir()),

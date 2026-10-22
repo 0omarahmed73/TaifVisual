@@ -1,0 +1,12 @@
+{
+  "app": {
+    "security": {
+      "capabilities": ["migrated"]
+    }
+  },
+  "bundle": {
+    "createUpdaterArtifacts": false,
+    "externalBin": [],
+    "resources": []
+  }
+}

@@ -1,0 +1,17 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- TAIF: dark canvas from the first frame, no default purple bars. -->
+    <style name="Theme.taif" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/taif_canvas</item>
+        <item name="android:statusBarColor">@color/taif_canvas</item>
+        <item name="android:navigationBarColor">@color/taif_canvas</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
+    <!-- Launch theme: dark system splash with no icon, handed to Theme.taif -->
+    <style name="Theme.taif.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/taif_canvas</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/taif_splash_blank</item>
+        <item name="postSplashScreenTheme">@style/Theme.taif</item>
+    </style>
+</resources>

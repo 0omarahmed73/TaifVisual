@@ -60,7 +60,9 @@
     "urlEyebrow": "IMPORTAR DE UM URL",
     "urlTitle": "Transferir média suportada",
     "urlDesc": "Cole um link do YouTube, X, Instagram, SoundCloud, Facebook ou LinkedIn.",
-    "downloadFromInternetPlaceholder": "https://…"
+    "downloadFromInternetPlaceholder": "https://…",
+    "dropTitleMobile": "Escolher ficheiro",
+    "dropSubMobile": "Toque para escolher no telemóvel"
   },
   "operations": {
     "cutOperationDesc": "Remova uma parte do meio",
@@ -142,7 +144,9 @@
     "summaryNote": "O tamanho final e o tempo dependem do ficheiro e do dispositivo.",
     "trimField": "Manter este intervalo",
     "cutField": "Remover este intervalo",
-    "compressField": "Nível de compressão"
+    "compressField": "Nível de compressão",
+    "preparingPreview": "A preparar uma pré-visualização deste vídeo…",
+    "previewUnavailable": "Este vídeo não pode ser pré-visualizado aqui, mas pode definir o intervalo com o cursor."
   },
   "opDetails": {
     "quality": "Escolha uma qualidade de saída inferior. As opções dependem do ficheiro.",
@@ -164,6 +168,14 @@
     "errorEyebrow": "NÃO FOI POSSÍVEL CONCLUIR",
     "tryAgain": "Tentar novamente",
     "backToStart": "Voltar ao início",
-    "details": "DETALHES"
+    "details": "DETALHES",
+    "share": "Partilhar"
+  },
+  "about": {
+    "title": "Sobre",
+    "role": "Programador Full Stack",
+    "website": "Website",
+    "github": "GitHub",
+    "linkedin": "LinkedIn"
   }
 }

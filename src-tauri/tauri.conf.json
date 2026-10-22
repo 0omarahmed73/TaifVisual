@@ -55,10 +55,29 @@
       "assetProtocol": {
         "scope": [
           "**",
-          "$APPLOCALDATA/**/*"
+          "$APPLOCALDATA/**/*",
+          "$APPCACHE/**/*",
+          "$APPDATA/**/*"
         ],
         "enable": true
-      }
+      },
+      "capabilities": [
+        "migrated",
+        {
+          "identifier": "desktop-capability",
+          "platforms": [
+            "macOS",
+            "windows",
+            "linux"
+          ],
+          "windows": [
+            "main"
+          ],
+          "permissions": [
+            "updater:default"
+          ]
+        }
+      ]
     },
     "windows": [
       {
