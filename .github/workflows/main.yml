@@ -9,27 +9,17 @@ jobs:
   publish-tauri:
     permissions:
       contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - platform: "macos-latest" # for Arm based macs (M1 and above).
-            args: "--target aarch64-apple-darwin --config {\"bundle\":{\"createUpdaterArtifacts\":false}}"
-          - platform: "ubuntu-22.04"
-            args: '--config {"bundle":{"createUpdaterArtifacts":false}}'
-          - platform: "windows-latest"
-            args: '--config {"bundle":{"createUpdaterArtifacts":false}}'
-
-    runs-on: ${{ matrix.platform }}
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Bundled binaries/models ship as small git files in the upstream
-      # repo (git-LFS points); the objects live on its LFS server, so the
-      # fetch step stages them locally (with curl --create-dirs) before
-      # bundling. Hashes are verified against the repo's recorded ones.
+      # Bundled binaries/models live outside the repo (upstream git-LFS
+      # objects); stage them before bundling. Verified hashes earlier.
+      # Windows runner: PowerShell is the default shell, so run bash explicitly.
       - name: fetch bundled media assets
+        shell: bash
         run: |
+          set -x
           base="https://media.githubusercontent.com/media/mohammadmansour200/basset/refs/heads/main/src-tauri"
           mkdir -p src-tauri/bin src-tauri/resources-linux
           cd src-tauri
@@ -38,19 +28,18 @@ jobs:
             bin/ffprobe-x86_64-pc-windows-msvc.exe \
             bin/SpleeterExe-x86_64-pc-windows-msvc.exe \
             bin/ytDlp-x86_64-pc-windows-msvc.exe \
-            bin/ffmpeg-aarch64-apple-darwin \
-            bin/ffprobe-aarch64-apple-darwin \
-            bin/ytDlp-aarch64-apple-darwin \
-            bin/ffmpeg-x86_64-apple-darwin \
             resources-linux/libtensorflow.so.1 \
             resources-linux/libtensorflow_framework.so.1 \
             models/2stems/saved_model.pb \
             models/2stems/variables/variables.data-00000-of-00001 \
             models/2stems/variables/variables.index; do
-            curl -sfL --create-dirs "$base/$f" -o "$f" || exit 1
+            if curl -fL --create-dirs "$base/$f" -o "$f"; then
+              echo "OK: $f"
+            else
+              echo "FAILED: $f"
+              exit 1
+            fi
           done
-          chmod +x bin/ffmpeg-* bin/ffprobe-* bin/ytDlp-* bin/SpleeterExe-* resources-linux/*.so.1 2>/dev/null || true
-          ls -la bin resources-linux models/2stems
 
       - name: setup node
         uses: actions/setup-node@v4
@@ -59,28 +48,17 @@ jobs:
 
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
-        with:
-          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin' || '' }}
-
-      - name: install dependencies (ubuntu only)
-        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: install frontend dependencies
-        run: npm install # change this to npm, pnpm or bun depending on which one you use.
+        run: npm install
 
       - uses: tauri-apps/tauri-action@dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
-          TAURI_KEY_PASSWORD: ""
         with:
-          tagName: v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version.
+          tagName: v__VERSION__
           releaseName: "TAIF v__VERSION__"
           releaseBody: "See the assets to download this version and install."
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.args }}
+          args: '--config {"bundle":{"createUpdaterArtifacts":false}}'
