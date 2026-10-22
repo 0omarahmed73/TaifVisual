@@ -1,4 +1,15 @@
-# TAIF — Handoff (updated 2026-10-22, evening)
+# TAIF — Handoff (updated 2026-10-23)
+
+# RELEASE STATE (latest)
+- Local repo is a clean orphan history (`main`), `.git` ~208 MB (committed Windows assets).
+- **GitHub push saga (resolved)**: user's repo `0omarahmed73/TaifVisual`, remote was empty (earlier pushes were all rejected — stale state / OAuth `workflow` scope). Fixed by `gh auth refresh -h github.com -s workflow` device flow (account **omarahmedpl**), `gh auth setup-git`, then push as that account.
+- **CI asset-fetch failures (resolved)**: the workflow's curl-fetch step 404'd upstream (`models/2stems/variables/variables.data…` not on upstream LFS media server) and Windows runner needs `shell: bash` for bash blocks. **Final design: no fetch step at all** — all Windows-facing assets are committed in the repo (each < GitHub's 100 MB limit): `bin/{ffmpeg,ffprobe,SpleeterExe,ytDlp}-x86_64-pc-windows-msvc.*`, `models/2stems/**` (real files), and the real 86 MB `resources-windows/tensorflow.dll` (replaced the 133-byte LFS pointer). Still untracked/too big: `resources-linux/libtensorflow*.so.1` (205 MB) and macOS binaries.
+- Workflow is **Windows-only** matrix for now (windows-latest); runs on tags `v*`. Tag `v2.0.0` currently points at `13dc62a` ("CI: commit Windows bundled assets directly"), run **#39857048511 in_progress**.
+- Before CI, push must touch `main` first (tag alone is enough; contents are on `13dc62a`).
+- **Linux deb already built + verified locally**: `src-tauri/target/release/bundle/deb/TAIF_2.0.0_amd64.deb` (sidecars + libtensorflow + model all in place). CI Linux job can be re-added later — it would need `resources-linux/*` fetched again (single 205 MB URL) or committed via LFS.
+- After a green run: **draft release "TAIF v2.0.0"** with `.msi`/NSIS `.exe` → user publishes.
+
+## Previous state notes
 
 Rebrand + redesign of basset-2.0.0 (Tauri 2 + React 18 + Vite + Tailwind + Radix, i18n EN/AR/PT).
 Design source: Figma Make "Complete Brand Identity Design". Window: 900×600 min (450), **starts maximized**.
