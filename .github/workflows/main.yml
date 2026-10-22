@@ -13,33 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Bundled binaries/models live outside the repo (upstream git-LFS
-      # objects); stage them before bundling. Verified hashes earlier.
-      # Windows runner: PowerShell is the default shell, so run bash explicitly.
-      - name: fetch bundled media assets
-        shell: bash
-        run: |
-          set -x
-          base="https://media.githubusercontent.com/media/mohammadmansour200/basset/refs/heads/main/src-tauri"
-          mkdir -p src-tauri/bin src-tauri/resources-linux
-          cd src-tauri
-          for f in \
-            bin/ffmpeg-x86_64-pc-windows-msvc.exe \
-            bin/ffprobe-x86_64-pc-windows-msvc.exe \
-            bin/SpleeterExe-x86_64-pc-windows-msvc.exe \
-            bin/ytDlp-x86_64-pc-windows-msvc.exe \
-            resources-linux/libtensorflow.so.1 \
-            resources-linux/libtensorflow_framework.so.1 \
-            models/2stems/saved_model.pb \
-            models/2stems/variables/variables.data-00000-of-00001 \
-            models/2stems/variables/variables.index; do
-            if curl -fL --create-dirs "$base/$f" -o "$f"; then
-              echo "OK: $f"
-            else
-              echo "FAILED: $f"
-              exit 1
-            fi
-          done
+      # All Windows-facing bundled assets (ffmpeg/ffprobe/SpleeterExe/ytDlp
+      # exes, tensorflow.dll, Spleeter model) are committed in the repo —
+      # each file is < GitHub's 100MB limit — so no fetch step is needed.
 
       - name: setup node
         uses: actions/setup-node@v4
