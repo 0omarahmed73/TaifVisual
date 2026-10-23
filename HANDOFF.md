@@ -84,3 +84,7 @@ Build/release:
 - Release APKs: `release/` (git-ignored), published on the GitHub release.
 
 Still open for Android: armeabi-v7a (32-bit) build; Play-Store style AAB; ffmpeg progress for very long videos' preview copy; light-theme/RTL pass on all screens at phone width; desktop build re-test via `npm run tauri build` (only `cargo check` + vite build were run after the Android refactor).
+
+## Linux install fix (2026-10-23)
+`SpleeterExe` resolves `models/2stems` relative to its working directory, so an installed app launched from the desktop failed with "Model folder not found at ~/models/2stems". The `spleeter_cwd` Tauri command (src-tauri/src/lib.rs) returns the executable's folder when `models/2stems` sits next to it, and `useSpleeter` starts the sidecar there (`spleeter(cmd, cwd)` in src/utils/command.ts). Dev runs and Android are unaffected. Windows uses the same layout but the MSI on the release predates this fix — rebuild it (tag v2.0.1) when convenient.
+NOTE: `src-tauri/resources-linux/` (libtensorflow*.so.1, ~240 MB) is git-ignored and was found missing once; it can be restored from an installed copy in `/usr/bin/lib/`.

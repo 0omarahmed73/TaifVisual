@@ -2,7 +2,9 @@ import { useState } from "react";
 
 import { join, appLocalDataDir } from "@tauri-apps/api/path";
 import { remove } from "@tauri-apps/plugin-fs";
+import { invoke } from "@tauri-apps/api/core";
 import { spleeter } from "@/utils/command";
+import { isAndroid } from "@/utils/platform";
 
 import { deleteMediaTemp, ensureDir } from "@/utils/fsUtils";
 import { SpleeterHelper } from "@/utils/SpleeterHelper";
@@ -53,12 +55,18 @@ function useSpleeter() {
 
     setLogs(`File duration: ${duration}`);
 
+    // Installed builds keep the model next to the executable; the tool finds it
+    // relative to its working directory.
+    const spleeterCwd = isAndroid()
+      ? null
+      : await invoke<string | null>("spleeter_cwd").catch(() => null);
+
     const spleeterSidecar = spleeter([
       preprocessedInputFilePath,
       outputPcmFilePath,
       duration.toString(),
       "20",
-    ]);
+    ], spleeterCwd);
 
     spleeterSidecar.on("close", async ({ code }) => {
       if (code === 0) {

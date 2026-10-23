@@ -61,6 +61,16 @@ async fn compress_image(input_path: String, output_path: String, quality: String
     Ok(format!("Image compressed successfully to {}", output_path))  
 }
 
+/// Folder the Spleeter sidecar must be started from: it resolves `models/2stems`
+/// relative to its working directory, and installed builds ship the model next
+/// to the app executable. Returns None when no model sits there (dev builds,
+/// where the project folder already works, and Android).
+#[tauri::command]
+fn spleeter_cwd() -> Option<String> {
+    let dir = std::env::current_exe().ok()?.parent()?.to_path_buf();
+    dir.join("models").join("2stems").is_dir().then(|| dir.to_string_lossy().into_owned())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let builder = tauri::Builder::default()
@@ -76,7 +86,7 @@ pub fn run() {
     let builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
 
     builder
-        .invoke_handler(tauri::generate_handler![compress_image])
+        .invoke_handler(tauri::generate_handler![compress_image, spleeter_cwd])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

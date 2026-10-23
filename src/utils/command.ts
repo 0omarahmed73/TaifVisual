@@ -25,7 +25,10 @@ export const ytDlp = (cmd: string[]): ToolCommand => {
   return desktop(Command.sidecar("bin/ytDlp", cmd));
 };
 
-export const spleeter = (cmd: string[]): ToolCommand => {
+/** [cwd] is the folder holding `models/2stems` (see the `spleeter_cwd` command). */
+export const spleeter = (cmd: string[], cwd?: string | null): ToolCommand => {
   if (isAndroid()) return new AndroidCommand("spleeter", cmd);
-  return desktop(Command.sidecar("bin/SpleeterExe", cmd));
+  return desktop(
+    Command.sidecar("bin/SpleeterExe", cmd, cwd ? { cwd } : undefined),
+  );
 };

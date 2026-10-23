@@ -40,3 +40,6 @@ release/
 
 # Local test media
 test-audio/
+
+# Browser-automation scratch output
+.playwright-mcp/
