@@ -1,6 +1,6 @@
 [package]
 name = "taif"
-version = "2.0.0"
+version = "2.0.1"
 description = "Utility for video/audio cutting, compressing, converting and quality changing"
 authors = ["Omar A. Saeed"]
 edition = "2021"
