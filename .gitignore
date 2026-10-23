@@ -43,3 +43,6 @@ test-audio/
 
 # Browser-automation scratch output
 .playwright-mcp/
+
+# Unrelated project kept in this folder (not part of TAIF)
+/taif/
