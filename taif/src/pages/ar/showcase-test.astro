@@ -1,0 +1,24 @@
+---
+/**
+ * Test-only route for the e2e suite (tests/e2e/content.spec.ts), Arabic
+ * variant of /showcase-test. Not linked from any navigation and carries no
+ * real imagery. The real manifest lives in src/content/screenshots.ts.
+ *
+ * T094: `noindex` + sitemap exclusion + public/e2e/screens-demo.png keep this
+ * fixture out of the public site. The empty notice has /ar/showcase-test-empty.
+ */
+import Showcase from "@/components/Showcase.astro";
+import { E2E_TEST_SCREENSHOT } from "@/content/screenshots";
+import { ar } from "@/content/ar";
+---
+
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>لقطة تجريبية</title>
+  </head>
+  <body>
+    <Showcase locale="ar" dict={ar} shots={[E2E_TEST_SCREENSHOT]} />
+  </body>
+</html>

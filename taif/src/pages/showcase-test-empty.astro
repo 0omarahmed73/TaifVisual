@@ -1,0 +1,20 @@
+---
+/**
+ * Test-only empty-manifest route (T095), sibling of /showcase-test. Renders
+ * the localized "screenshots are coming soon" notice with zero imagery.
+ * `noindex` + the sitemap filter keep it out of the public site.
+ */
+import Showcase from "@/components/Showcase.astro";
+import { en } from "@/content/en";
+---
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Empty showcase fixture</title>
+  </head>
+  <body>
+    <Showcase locale="en" dict={en} shots={[]} />
+  </body>
+</html>

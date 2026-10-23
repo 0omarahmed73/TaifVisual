@@ -1,0 +1,11 @@
+---
+import Page from "@/components/Page.astro";
+import { en } from "@/content/en";
+---
+
+<Page locale="en" dict={en} path="/" />
+
+<script>
+  // T054: the language-preference redirect exists ONLY on this page (US3).
+  import "@/scripts/lang-redirect";
+</script>

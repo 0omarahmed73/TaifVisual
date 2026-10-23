@@ -1,0 +1,246 @@
+---
+/**
+ * Faithful, purely decorative recreation of the TAIF app launch splash
+ * (app source: src/components/ui/Splash.tsx + src/index.css — three ribbon
+ * bands, soft spectral glow, "TAIF · طَيْف" lockup and a thin progress line).
+ *
+ * This is a preview panel, not a loading screen: it never gates content and
+ * has no focusable elements. It is marked aria-hidden because every word it
+ * shows ("TAIF", "طَيْف") already exists in the visible hero/header.
+ */
+---
+
+<div
+  class="relative mx-auto w-full max-w-[236px]"
+  aria-hidden="true"
+  data-testid="splash-preview"
+>
+  <div class="rounded-[2.4rem] border border-border bg-card p-1.5 shadow-2xl">
+    <div
+      class="relative flex aspect-[738/1600] w-full flex-col items-center justify-center overflow-hidden rounded-[2rem] border border-border/60 bg-background"
+    >
+      <div class="splash-stage absolute inset-0 flex flex-col items-center justify-center">
+      <div
+        class="splash-glow splash-preview-glow absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full"
+      >
+      </div>
+
+      <svg
+        viewBox="0 0 48 48"
+        class="splash-preview-mark relative h-24 w-24"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient
+            id="splash-preview-spectra"
+            gradientUnits="userSpaceOnUse"
+            x1="8"
+            y1="8"
+            x2="40"
+            y2="40"
+          >
+            <stop offset="0" style="stop-color:hsl(var(--spectra-start))"></stop>
+            <stop offset="0.5" style="stop-color:hsl(var(--spectra-mid))"></stop>
+            <stop offset="1" style="stop-color:hsl(var(--spectra-end))"></stop>
+          </linearGradient>
+        </defs>
+        <g>
+          <path
+            d="M9 14a5 5 0 0 1 5-5h5v20a5 5 0 0 1-10 0Z"
+            fill="url(#splash-preview-spectra)"></path>
+          <path d="M14 9h5v20a5 5 0 0 1-5 5Z" fill="#fff" opacity=".18"></path>
+        </g>
+        <g>
+          <path
+            d="M19 14a5 5 0 0 1 5-5h5v26a5 5 0 0 1-10 0Z"
+            fill="url(#splash-preview-spectra)"></path>
+          <path d="M24 9h5v26a5 5 0 0 1-5 5Z" fill="#fff" opacity=".18"></path>
+        </g>
+        <g>
+          <path
+            d="M29 19a5 5 0 0 1 5-5h5v15a5 5 0 0 1-10 0Z"
+            fill="url(#splash-preview-spectra)"></path>
+          <path d="M34 14h5v15a5 5 0 0 1-5 5Z" fill="#fff" opacity=".18"></path>
+        </g>
+      </svg>
+
+      <div
+        class="splash-preview-word relative mt-6 flex items-center gap-2.5 text-foreground"
+      >
+        <span dir="ltr" class="text-lg font-extrabold leading-none tracking-[0.3em]">
+          TAIF
+        </span>
+        <span class="h-4 w-px bg-border"></span>
+        <span lang="ar" class="text-base font-semibold leading-none text-muted-foreground">
+          طَيْف
+        </span>
+      </div>
+
+      <div class="splash-preview-track relative mt-8" aria-hidden="true">
+        <span class="splash-preview-progress bg-spectra"></span>
+      </div>
+      </div>
+
+      <img
+        src="/screenshots/home-android.webp"
+        alt=""
+        width="738"
+        height="1600"
+        loading="lazy"
+        decoding="async"
+        class="home-stage absolute inset-0 h-full w-full object-cover"
+      />
+    </div>
+  </div>
+</div>
+
+<style>
+  /* The splash plays, then the phone preview settles on the real app home
+     screen (genuine capture). CSS-only, so no JS or hydration is needed. */
+  .splash-stage {
+    animation: splash-stage-out 420ms 1900ms cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .home-stage {
+    opacity: 0;
+    animation: home-stage-in 480ms 2000ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  @keyframes splash-stage-out {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  @keyframes home-stage-in {
+    from {
+      opacity: 0;
+      transform: scale(1.015);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Each entry animation runs once; the progress line fills once in ~1.6s. */
+  .splash-preview-glow {
+    animation: splash-preview-glow-in 700ms 100ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .splash-preview-mark {
+    animation: splash-preview-mark-in 700ms 120ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .splash-preview-word {
+    animation: splash-preview-word-in 550ms 300ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .splash-preview-track {
+    position: relative;
+    width: 8rem;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 9999px;
+    background: hsl(var(--border));
+    animation: splash-preview-track-in 350ms 360ms ease-out both;
+  }
+
+  .splash-preview-progress {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border-radius: inherit;
+    transform-origin: left center;
+    animation: splash-preview-progress 1600ms 360ms cubic-bezier(0.65, 0, 0.35, 1) both;
+  }
+
+  :global([dir="rtl"]) .splash-preview-progress {
+    transform-origin: right center;
+  }
+
+  @keyframes splash-preview-glow-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.6);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes splash-preview-mark-in {
+    from {
+      opacity: 0;
+      transform: translateY(-6px) scaleY(0.85);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes splash-preview-word-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes splash-preview-track-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes splash-preview-progress {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  /* Purely decorative: no animation at all when motion is reduced. */
+  @media (prefers-reduced-motion: reduce) {
+    .splash-stage {
+      display: none;
+      animation: none;
+    }
+
+    .home-stage {
+      opacity: 1;
+      animation: none;
+      transform: none;
+    }
+
+    .splash-preview-glow,
+    .splash-preview-mark,
+    .splash-preview-word,
+    .splash-preview-track,
+    .splash-preview-progress {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+
+    .splash-preview-glow {
+      transform: translate(-50%, -50%);
+    }
+
+    .splash-preview-progress {
+      transform: none;
+    }
+  }
+</style>

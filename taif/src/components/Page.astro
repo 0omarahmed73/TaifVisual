@@ -1,0 +1,49 @@
+---
+/**
+ * Shared page composition. Section order fixed by FR-001: header, hero,
+ * showcase, features, how-it-works, downloads, about, developer, FAQ, footer.
+ * Developer/FAQ/footer placehoders are completed by US4–US7 tasks.
+ */
+import type { Locale } from "@/content/types";
+import type { Dictionary } from "@/content/types";
+import Base from "@/layouts/Base.astro";
+import Header from "@/components/Header.astro";
+import Hero from "@/components/Hero.astro";
+import Showcase from "@/components/Showcase.astro";
+import Features from "@/components/Features.astro";
+import HowItWorks from "@/components/HowItWorks.astro";
+import Downloads from "@/components/Downloads.astro";
+import About from "@/components/About.astro";
+import Developer from "@/components/Developer.astro";
+import Faq from "@/components/Faq.astro";
+import Footer from "@/components/Footer.astro";
+import LanguageSwitch from "@/components/LanguageSwitch.astro";
+
+interface Props {
+  locale: Locale;
+  dict: Dictionary;
+  path?: string;
+}
+
+const { locale, dict, path = "/" } = Astro.props;
+---
+
+<Base locale={locale} dict={dict} path={path}>
+  <Header dict={dict}>
+    <LanguageSwitch locale={locale} path={path} slot="language" />
+  </Header>
+
+  <main id="main">
+    <Hero locale={locale} dict={dict} />
+    <Showcase locale={locale} dict={dict} />
+    <Features dict={dict} />
+    <HowItWorks dict={dict} />
+    <Downloads locale={locale} dict={dict} />
+    <About dict={dict} />
+
+    <Developer locale={locale} dict={dict} />
+    <Faq dict={dict} />
+  </main>
+
+  <Footer locale={locale} dict={dict} />
+</Base>

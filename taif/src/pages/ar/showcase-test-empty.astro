@@ -1,0 +1,19 @@
+---
+/**
+ * Test-only empty-manifest route, Arabic sibling of /showcase-test-empty.
+ * `noindex` + the sitemap filter keep it out of the public site.
+ */
+import Showcase from "@/components/Showcase.astro";
+import { ar } from "@/content/ar";
+---
+
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>لقطة تجريبية فارغة</title>
+  </head>
+  <body>
+    <Showcase locale="ar" dict={ar} shots={[]} />
+  </body>
+</html>

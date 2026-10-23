@@ -1,0 +1,31 @@
+---
+/**
+ * How It Works (US2, T045): the real app flow (FR-006) as ordered steps.
+ */
+import type { Dictionary } from "@/content/types";
+
+interface Props {
+  dict: Dictionary;
+}
+
+const { dict } = Astro.props;
+---
+
+<section id="how-it-works" class="container scroll-mt-[84px] py-16">
+  <h2 class="text-2xl font-extrabold tracking-[-0.03em] text-foreground sm:text-3xl [&:lang(ar)]:tracking-normal">
+    {dict.howItWorks.heading}
+  </h2>
+  <ol class="relative mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:before:absolute lg:before:inset-x-10 lg:before:top-[2.1rem] lg:before:h-px lg:before:bg-border">
+    {dict.howItWorks.steps.map((step, idx) => (
+      <li class="relative z-10 flex flex-col gap-3 rounded-[12px] border border-border bg-gradient-to-br from-card to-background p-5">
+        <span
+          aria-hidden="true"
+          class="inline-flex w-fit items-center rounded-md border border-border bg-field px-2.5 py-0.5 font-mono text-xs font-bold text-[hsl(var(--spectra-end))]"
+        >
+          0{idx + 1}
+        </span>
+        <p class="text-sm leading-relaxed text-foreground">{step}</p>
+      </li>
+    ))}
+  </ol>
+</section>

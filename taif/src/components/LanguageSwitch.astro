@@ -1,0 +1,202 @@
+---
+/**
+ * T053 (US3): dropdown language switcher to the equivalent page of the other locale.
+ * - hreflang + lang on each option so AT/engines know the language;
+ * - accessible label written in the TARGET language on the switch link;
+ * - click writes `taif.lang` via src/scripts/lang-pref.ts;
+ * - a tiny bundled module keeps the link's hash in sync with current page hash
+ *   so switching preserves the fragment (T051), and closes on click-outside/Escape.
+ */
+import type { Locale } from "@/content/types";
+import { otherLocale } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+  /** Current page path to which the other-locale suffix is applied. */
+  path?: string;
+  direction?: "up" | "down";
+}
+
+const { locale, path: _path = "/", direction = "down" } = Astro.props;
+const target = otherLocale(locale);
+const href = target === "ar" ? "/ar" : "/";
+const currentHref = locale === "ar" ? "/ar" : "/";
+const targetLang = target === "ar" ? "ar" : "en";
+const label = target === "ar" ? "العربية" : "English";
+const currentLabel = locale === "ar" ? "العربية" : "English";
+
+const options: {
+  code: Locale;
+  name: string;
+  href: string;
+  active: boolean;
+}[] = [
+  {
+    code: "en",
+    name: "English",
+    href: locale === "en" ? currentHref : href,
+    active: locale === "en",
+  },
+  {
+    code: "ar",
+    name: "العربية",
+    href: locale === "ar" ? currentHref : href,
+    active: locale === "ar",
+  },
+];
+---
+
+<details class="group relative inline-block" data-lang-dropdown>
+  <summary
+    class="inline-flex h-11 cursor-pointer list-none items-center gap-1.5 rounded-lg border border-border bg-secondary/70 px-3 text-xs font-semibold text-foreground transition-colors hover:border-muted-foreground/50 hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden md:h-9"
+    data-lang-switch={target}
+    data-lang-trigger={target}
+  >
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+      <path d="M2 12h20" />
+    </svg>
+    <span lang={locale}>{currentLabel}</span>
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform duration-150 group-open:rotate-180"
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </summary>
+
+  <div
+    class:list={[
+      "absolute end-0 z-50 min-w-[148px] rounded-xl border border-border bg-popover p-1.5 text-popover-foreground shadow-xl",
+      direction === "up" ? "bottom-full mb-1.5" : "top-full mt-1.5",
+    ]}
+  >
+    {
+      options.map((opt) =>
+        opt.active ? (
+          <a
+            href={opt.href}
+            hreflang={opt.code}
+            lang={opt.code}
+            aria-current="page"
+            class="flex min-h-11 items-center justify-between gap-2 rounded-lg bg-secondary/80 px-2.5 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:min-h-9"
+          >
+            <span>{opt.name}</span>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="h-3.5 w-3.5 shrink-0 text-[hsl(var(--spectra-end))]"
+            >
+              <path d="M20 6 9 17l-5-5" />
+            </svg>
+          </a>
+        ) : (
+          <a
+            href={ href }
+            hreflang={targetLang}
+            lang={targetLang}
+            aria-label={label}
+            data-lang-switch={target}
+            class="mt-0.5 flex min-h-11 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:min-h-9"
+          >
+            <span>{opt.name}</span>
+          </a>
+        ),
+      )
+    }
+  </div>
+</details>
+
+<script>
+  import { setLangPref } from "@/scripts/lang-pref";
+
+  function samePageIn(targetLang: string): string {
+    const pathname = window.location.pathname;
+    const search = window.location.search;
+    const isArPath = pathname === "/ar" || pathname.startsWith("/ar/");
+    let mapped =
+      targetLang === "ar"
+        ? isArPath
+          ? pathname.replace(/\/$/, "") || "/ar"
+          : pathname === "/"
+            ? "/ar"
+            : `/ar${pathname}`
+        : isArPath
+          ? pathname.slice(3) || "/"
+          : pathname;
+    if (mapped !== "/") mapped = mapped.replace(/\/$/, "");
+    return mapped + search + window.location.hash;
+  }
+
+  function applyHashToSwitches(): void {
+    document
+      .querySelectorAll<HTMLAnchorElement>("a[data-lang-switch]")
+      .forEach((el) => {
+        const targetLang = el.getAttribute("data-lang-switch");
+        if (targetLang) el.setAttribute("href", samePageIn(targetLang));
+      });
+  }
+
+  applyHashToSwitches();
+  window.addEventListener("hashchange", applyHashToSwitches);
+
+  document.addEventListener("click", (event) => {
+    const targetNode = event.target as HTMLElement | null;
+    if (!targetNode) return;
+
+    // Close open language dropdowns when clicking outside
+    document
+      .querySelectorAll<HTMLDetailsElement>("details[data-lang-dropdown][open]")
+      .forEach((dropdown) => {
+        if (!dropdown.contains(targetNode)) {
+          dropdown.removeAttribute("open");
+        }
+      });
+
+    const el = targetNode.closest("a[data-lang-switch]");
+    if (!el) return;
+    const target = el.getAttribute("data-lang-switch");
+    setLangPref(target === "ar" ? "ar" : "en");
+    // follow the navigation normally
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    document
+      .querySelectorAll<HTMLDetailsElement>("details[data-lang-dropdown][open]")
+      .forEach((dropdown) => {
+        const hadFocus = dropdown.contains(document.activeElement);
+        dropdown.removeAttribute("open");
+        if (hadFocus) {
+          dropdown.querySelector<HTMLElement>("summary")?.focus();
+        }
+      });
+  });
+</script>
+
+<style>
+  a {
+    color: inherit;
+  }
+</style>

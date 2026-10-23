@@ -1,0 +1,31 @@
+---
+/**
+ * Test-only route for the e2e suite (tests/e2e/content.spec.ts). It renders
+ * the Showcase <figure>/<img> contract against the declared
+ * E2E_TEST_SCREENSHOT fixture; it is not linked from any navigation and
+ * carries no real imagery. The real manifest lives in
+ * src/content/screenshots.ts.
+ *
+ * T094: kept out of the production surface with `noindex`, an explicit
+ * sitemap exclusion (astro.config.mjs) and a real fixture PNG in
+ * public/e2e/screens-demo.png. The empty-manifest notice has its own fixture
+ * route at /showcase-test-empty (T095).
+ */
+import Showcase from "@/components/Showcase.astro";
+import { E2E_TEST_SCREENSHOT } from "@/content/screenshots";
+import { en } from "@/content/en";
+
+const locale = Astro.url.pathname.startsWith("/ar") ? "ar" : "en";
+const dict = en;
+---
+
+<html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Showcase fixture</title>
+  </head>
+  <body>
+    <Showcase locale={locale} dict={dict} shots={[E2E_TEST_SCREENSHOT]} />
+  </body>
+</html>

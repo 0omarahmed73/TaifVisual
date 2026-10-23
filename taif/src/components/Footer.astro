@@ -1,0 +1,94 @@
+---
+/**
+ * Footer (US5, T065): exactly the verified link set — repository, Releases,
+ * GPL-3.0 LICENSE blob (built from SiteConfig), the developer's three links —
+ * plus in-page anchors and the language switch (T066 links contract).
+ */
+import type { Locale } from "@/content/types";
+import type { Dictionary } from "@/content/types";
+import { repoUrl, releasesUrl, licenseUrl, siteConfig } from "@/config/site";
+import LanguageSwitch from "@/components/LanguageSwitch.astro";
+
+interface Props {
+  locale: Locale;
+  dict: Dictionary;
+}
+
+const { locale, dict } = Astro.props;
+const dev = siteConfig.developer;
+const devLinks = [
+  { href: dev.links.website, label: dict.developer.links.website },
+  { href: dev.links.github, label: dict.developer.links.github },
+  { href: dev.links.linkedin, label: dict.developer.links.linkedin },
+];
+const sectionLinks = dict.nav.links.map((link) => ({
+  href: `#${link.id}`,
+  label: link.label,
+}));
+const footerLinkClass =
+  "rounded transition-colors hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+---
+
+<footer class="mt-12 border-t border-border bg-appbar text-xs text-muted-foreground">
+  <div class="container grid gap-8 py-10 md:grid-cols-3">
+    <div class="space-y-3">
+      <div class="inline-flex items-center gap-2.5 text-foreground">
+        <img
+          src="/taif-mark.svg"
+          alt=""
+          width="24"
+          height="24"
+          class="h-6 w-6 shrink-0"
+        />
+        <span dir="ltr" class="text-xs font-bold tracking-[0.16em] text-foreground">
+          TAIF
+        </span>
+        <span aria-hidden="true" class="h-3.5 w-px bg-border"></span>
+        <span lang="ar" class="text-xs font-medium text-muted-foreground">
+          طَيْف
+        </span>
+      </div>
+      <p class="max-w-[68ch] leading-relaxed">{dict.footer.tagline}</p>
+    </div>
+    <ul class="space-y-2">
+      <li>
+        <a href={repoUrl} target="_blank" rel="noopener noreferrer" class={footerLinkClass}>
+          {dict.footer.repository}
+        </a>
+      </li>
+      <li>
+        <a href={releasesUrl} target="_blank" rel="noopener noreferrer" class={footerLinkClass}>
+          {dict.footer.releases}
+        </a>
+      </li>
+      <li>
+        <a href={licenseUrl} target="_blank" rel="noopener noreferrer" class={footerLinkClass}>
+          {dict.footer.license} (<bdi dir="ltr">{siteConfig.license}</bdi>)
+        </a>
+      </li>
+      {
+        devLinks.map((link) => (
+          <li>
+            <a href={link.href} target="_blank" rel="noopener noreferrer" class={footerLinkClass}>
+              <bdi dir="ltr">{link.label}</bdi>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+    <ul class="space-y-2">
+      {
+        sectionLinks.map((link) => (
+          <li>
+            <a href={link.href} class={footerLinkClass}>
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="pt-1">
+        <LanguageSwitch locale={locale} path="/" direction="up" />
+      </li>
+    </ul>
+  </div>
+</footer>

@@ -1,0 +1,461 @@
+---
+/**
+ * Showcase (US2, T046): genuine screenshots only, driven by screenshots.ts.
+ * Empty manifest → localized "coming soon" notice, zero imagery.
+ * `?showcase-test=1` renders the declared test-only fixture (used by e2e).
+ *
+ * Every screenshot is a button that opens an accessible <dialog> lightbox
+ * (src/scripts/lightbox.ts). The <img> keeps its exact src/alt/width/height/
+ * loading/decoding contract and still lives inside its <figure>; the dialog is
+ * rendered as a sibling of #showcase so `#showcase figure img` selectors stay
+ * untouched.
+ */
+import { screenshots, type Screenshot } from "@/content/screenshots";
+import type { Dictionary, Locale } from "@/content/types";
+
+interface Props {
+  locale: Locale;
+  dict: Dictionary;
+  /** Test-only override of the manifest (e2e route). */
+  shots?: Screenshot[];
+}
+
+const { locale, dict, shots } = Astro.props;
+const shown: Screenshot[] = shots ?? screenshots;
+const desktopShots = shown.filter((s) => s.platform !== "android");
+const androidShots = shown.filter((s) => s.platform === "android");
+const tabbed = desktopShots.length > 0 && androidShots.length > 0;
+const panelAttrs = (name: string) =>
+  tabbed
+    ? { role: "tabpanel", id: `showcase-panel-${name}`, "aria-labelledby": `showcase-tab-${name}`, "data-showcase-panel": name }
+    : {};
+const enlargeLabel = (alt: string): string =>
+  dict.showcase.lightbox.enlarge.replace("{alt}", alt);
+---
+
+<section id="showcase" class="container scroll-mt-[84px] py-16">
+  <h2 class="text-2xl font-extrabold tracking-[-0.03em] text-foreground sm:text-3xl [&:lang(ar)]:tracking-normal">
+    {dict.showcase.heading}
+  </h2>
+  {shown.length === 0 ? (
+    <div class="mt-6 rounded-[14px] border border-dashed border-border bg-card/40 p-10 text-center text-sm text-muted-foreground">
+      <p>{dict.showcase.comingSoon}</p>
+    </div>
+  ) : (
+    <div class="mt-8 flex flex-col gap-8">
+      {tabbed && (
+        <div
+          role="tablist"
+          aria-label={dict.showcase.tabs.label}
+          class="showcase-tabs flex w-fit gap-1 self-center rounded-full border border-border bg-card p-1"
+        >
+          {(["desktop", "android"] as const).map((name) => (
+            <button
+              type="button"
+              role="tab"
+              id={`showcase-tab-${name}`}
+              data-tab={name}
+              aria-controls={`showcase-panel-${name}`}
+              aria-selected={name === "desktop" ? "true" : "false"}
+              tabindex={name === "desktop" ? 0 : -1}
+              class="rounded-full px-5 py-1.5 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-selected:bg-primary aria-selected:text-primary-foreground"
+            >
+              {dict.showcase.tabs[name]}
+            </button>
+          ))}
+        </div>
+      )}
+      {desktopShots.length > 0 && (
+        <div class="grid gap-5 md:grid-cols-2" {...panelAttrs("desktop")}>
+          {desktopShots.map((shot, idx) => (
+            <figure
+              class:list={[
+                "group overflow-hidden rounded-[14px] border border-border bg-card shadow-lg",
+                desktopShots.length === 3 && idx === 0 && "md:col-span-2",
+                desktopShots.length === 1 && "md:col-span-2",
+              ]}
+            >
+              <div
+                aria-hidden="true"
+                class="flex items-center justify-between border-b border-border bg-appbar/80 px-3.5 py-2"
+              >
+                <div class="flex items-center gap-1.5">
+                  <span class="h-2.5 w-2.5 rounded-full bg-border"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-border"></span>
+                  <span class="h-2.5 w-2.5 rounded-full bg-border"></span>
+                </div>
+                <span dir="ltr" class="text-[11px] font-semibold tracking-widest text-muted-foreground">
+                  TAIF
+                </span>
+                <span class="w-8"></span>
+              </div>
+              <button
+                type="button"
+                class="block w-full cursor-zoom-in border-0 bg-transparent p-0 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                data-showcase-trigger
+                data-lightbox-src={shot.file}
+                data-lightbox-alt={shot.alt[locale]}
+                data-lightbox-width={shot.width}
+                data-lightbox-height={shot.height}
+                aria-label={enlargeLabel(shot.alt[locale])}
+              >
+                <img
+                  src={shot.file}
+                  alt={shot.alt[locale]}
+                  width={shot.width}
+                  height={shot.height}
+                  loading="lazy"
+                  decoding="async"
+                  class="block h-auto w-full transition duration-300 group-hover:scale-[1.01] group-hover:brightness-105 group-focus-within:scale-[1.01]"
+                />
+              </button>
+              <figcaption class="border-t border-border bg-appbar/60 px-4 py-2.5 text-xs text-muted-foreground">
+                {shot.alt[locale]}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+      {androidShots.length > 0 && (
+        <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5" {...panelAttrs("android")}>
+          {androidShots.map((shot) => (
+            <figure class="group flex flex-col overflow-hidden rounded-[16px] border border-border bg-card p-2 shadow-md">
+              <div class="overflow-hidden rounded-[11px] border border-border/60 bg-background">
+                <button
+                  type="button"
+                  class="block w-full cursor-zoom-in border-0 bg-transparent p-0 text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  data-showcase-trigger
+                  data-lightbox-src={shot.file}
+                  data-lightbox-alt={shot.alt[locale]}
+                  data-lightbox-width={shot.width}
+                  data-lightbox-height={shot.height}
+                  aria-label={enlargeLabel(shot.alt[locale])}
+                >
+                  <img
+                    src={shot.file}
+                    alt={shot.alt[locale]}
+                    width={shot.width}
+                    height={shot.height}
+                    loading="lazy"
+                    decoding="async"
+                    class="block h-auto w-full transition duration-300 group-hover:scale-[1.01] group-hover:brightness-105 group-focus-within:scale-[1.01]"
+                  />
+                </button>
+              </div>
+              <figcaption class="mt-2 px-1 text-[11px] leading-snug text-muted-foreground line-clamp-2">
+                {shot.alt[locale]}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+    </div>
+  )}
+</section>
+
+{shown.length > 0 && (
+  <dialog
+    id="showcase-lightbox"
+    class="showcase-lightbox"
+    aria-modal="true"
+    aria-label={dict.showcase.lightbox.dialogLabel}
+    data-showcase-lightbox
+  >
+    <div class="showcase-lightbox__panel">
+      <button
+        type="button"
+        class="showcase-lightbox__button showcase-lightbox__close"
+        data-lightbox-close
+        aria-label={dict.showcase.lightbox.close}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+          class="h-5 w-5"
+        >
+          <path d="M18 6 6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      {shown.length > 1 && (
+        <button
+          type="button"
+          class="showcase-lightbox__button showcase-lightbox__prev"
+          data-lightbox-prev
+          aria-label={dict.showcase.lightbox.previous}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="icon-flip h-5 w-5"
+          >
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+        </button>
+      )}
+
+      <figure class="showcase-lightbox__figure">
+        <img
+          data-lightbox-image
+          src={shown[0].file}
+          alt={shown[0].alt[locale]}
+          width={shown[0].width}
+          height={shown[0].height}
+          class="showcase-lightbox__image"
+        />
+        <figcaption class="showcase-lightbox__caption" data-lightbox-caption>
+          {shown[0].alt[locale]}
+        </figcaption>
+      </figure>
+
+      {shown.length > 1 && (
+        <button
+          type="button"
+          class="showcase-lightbox__button showcase-lightbox__next"
+          data-lightbox-next
+          aria-label={dict.showcase.lightbox.next}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+            class="icon-flip h-5 w-5"
+          >
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </button>
+      )}
+    </div>
+  </dialog>
+)}
+
+<style>
+  .showcase-lightbox {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /* The dimmed backdrop is painted by the dialog itself so the whole
+       overlay fades as one unit — the native ::backdrop cannot survive the
+       dialog leaving the top layer, which caused the exit-layout glitch. */
+    background: hsl(0 0% 0% / 0.8);
+    backdrop-filter: blur(4px);
+    color: hsl(var(--foreground));
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .showcase-lightbox:not([open]) {
+    display: none;
+    opacity: 0;
+  }
+
+  .showcase-lightbox[open] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+  }
+
+  @starting-style {
+    .showcase-lightbox[open] {
+      opacity: 0;
+    }
+  }
+
+  .showcase-lightbox__panel {
+    position: relative;
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3.5rem 1rem 1rem;
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+    transition:
+      opacity 220ms ease,
+      transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .showcase-lightbox[open] .showcase-lightbox__panel {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Closing runs while still [open] (top layer) so layout stays centered;
+     the whole overlay (dim + panel) fades as one, then the dialog closes. */
+  .showcase-lightbox.is-closing {
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: 180ms;
+  }
+
+  .showcase-lightbox.is-closing .showcase-lightbox__panel {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+    transition-duration: 180ms;
+  }
+
+  @starting-style {
+    .showcase-lightbox[open] .showcase-lightbox__panel {
+      opacity: 0;
+      transform: scale(0.96) translateY(8px);
+    }
+  }
+
+  .showcase-lightbox__figure {
+    display: flex;
+    max-width: 100%;
+    max-height: 100%;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .showcase-lightbox__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(90vw, 1400px);
+    max-height: 85vh;
+    object-fit: contain;
+    border: 1px solid hsl(0 0% 100% / 0.15);
+    border-radius: 0.75rem;
+    box-shadow: 0 30px 80px hsl(0 0% 0% / 0.55);
+    opacity: 1;
+    transition: opacity 160ms ease;
+  }
+
+  .showcase-lightbox__image.is-swapping {
+    opacity: 0.3;
+  }
+
+  .showcase-lightbox__caption {
+    max-width: min(90vw, 60rem);
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    background: #0b0f17;
+    text-align: center;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: #f3f5f8;
+  }
+
+  .showcase-lightbox__button {
+    position: absolute;
+    display: inline-flex;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid hsl(0 0% 100% / 0.22);
+    border-radius: 9999px;
+    background: hsl(0 0% 0% / 0.55);
+    color: #fff;
+    transition: background-color 150ms ease;
+  }
+
+  .showcase-lightbox__button:hover {
+    background: hsl(0 0% 0% / 0.78);
+  }
+
+  .showcase-lightbox__button:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  .showcase-lightbox__close {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .showcase-lightbox__prev {
+    top: 50%;
+    left: 0.5rem;
+    transform: translateY(-50%);
+  }
+
+  .showcase-lightbox__next {
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+  }
+
+  :global([dir="rtl"]) .showcase-lightbox__close {
+    right: auto;
+    left: 0.75rem;
+  }
+
+  :global([dir="rtl"]) .showcase-lightbox__prev {
+    right: 0.5rem;
+    left: auto;
+  }
+
+  :global([dir="rtl"]) .showcase-lightbox__next {
+    right: auto;
+    left: 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    .showcase-lightbox__panel {
+      padding-inline: 0.5rem;
+    }
+
+    .showcase-lightbox__prev {
+      left: 0.25rem;
+    }
+
+    .showcase-lightbox__next {
+      right: 0.25rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .showcase-lightbox,
+    .showcase-lightbox::backdrop,
+    .showcase-lightbox__panel,
+    .showcase-lightbox__image {
+      transition-duration: 1ms !important;
+    }
+
+    .showcase-lightbox__panel,
+    .showcase-lightbox[open] .showcase-lightbox__panel,
+    .showcase-lightbox__image {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // Bundled as an external module so the CSP can stay `script-src 'self'`.
+  import { initLightbox } from "@/scripts/lightbox";
+  import { initShowcaseTabs } from "@/scripts/showcase-tabs";
+
+  initLightbox();
+  initShowcaseTabs();
+</script>

@@ -1,0 +1,106 @@
+---
+/**
+ * Base layout: html lang/dir from locale, localized head metadata.
+ * Absolute canonical/hreflang/OG URLs are emitted only when SITE_URL is set.
+ * A deployment production build (NODE_ENV=production on CI/Vercel) without
+ * SITE_URL fails with a clear error instead of guessing a domain. A plain
+ * local/terminal build (where Astro also sets NODE_ENV=production) warns so
+ * rehearsal builds stay usable; contracts/locale-routing.md.
+ */
+import "@/styles/global.css";
+import SiteSplash from "@/components/SiteSplash.astro";
+import type { Locale } from "@/content/types";
+import type { Dictionary } from "@/content/types";
+import { alternateUrls, isRtl, localePath } from "@/lib/i18n";
+import { siteConfig } from "@/config/site";
+
+interface Props {
+  locale: Locale;
+  dict: Dictionary;
+  path?: string;
+}
+
+const { locale, dict, path = "/" } = Astro.props;
+// astro.config.mjs only sets `site` when SITE_URL is present at start-up.
+// Astro.site is undefined when it was not set (import.meta.env.SITE === "").
+const siteUrl: string | undefined = Astro.site?.origin ?? undefined;
+
+// Detect deployment environments; Astro sets NODE_ENV=production even for
+// plain local terminal builds, so a local build only warns while a CI/Vercel
+// deployment without SITE_URL fails fast (no guessed domain).
+const isDeploy = (process.env["CI"] ?? "") !== "" || process.env["VERCEL"] === "1";
+const isProductionBuild = import.meta.env.PROD && isDeploy;
+if (!siteUrl && isProductionBuild) {
+  throw new Error(
+    "SITE_URL is required for production builds. Set it (e.g. SITE_URL=https://your-domain.example) and rebuild. No domain is guessed.",
+  );
+}
+if (!siteUrl) {
+  console.warn(
+    "[taif] SITE_URL is not set: canonical, hreflang, OG and sitemap absolute URLs are omitted. This is expected for local/preview builds.",
+  );
+}
+
+const base = siteUrl ? siteUrl.replace(/\/+$/, "") : null;
+const alternates = alternateUrls(path, siteUrl);
+const dir = isRtl(locale) ? "rtl" : "ltr";
+const canonical = base ? `${base}${localePath(locale, path)}` : null;
+const htmlLang = locale === "ar" ? "ar" : "en";
+const ogLocale = dict.meta.ogLocale;
+const ogLocaleAlternate = dict.meta.ogLocaleAlternate;
+// T069: JSON-LD SoftwareApplication with ONLY verified fields (no ratings,
+// no prices, no URLs that require SITE_URL). applicationCategory is a
+// verified fact: TAIF is a media-processing desktop app.
+const operatingSystem = "Windows, Linux, Android";
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: dict.hero.name.replace(/\s+·\s+طَيْف$/, "").trim(),
+  applicationCategory: "MultimediaApplication",
+  license: siteConfig.license,
+  operatingSystem,
+};
+const ogImage = base
+  ? `${base}/og-${locale === "ar" ? "ar" : "en"}.png`
+  : null;
+---
+
+<!doctype html>
+<html lang={htmlLang} dir={dir} class="dark scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{dict.meta.title}</title>
+    <meta name="description" content={dict.meta.description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)}
+    {base && (
+      <meta
+        property="og:url"
+        content={`${base}${localePath(locale, path)}`}
+      />
+    )}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={dict.meta.title} />
+    <meta property="og:description" content={dict.meta.description} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={dict.meta.title} />
+    <meta name="twitter:description" content={dict.meta.description} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <SiteSplash />
+    <a
+      href="#main"
+      class="absolute rounded bg-primary px-4 py-2 text-primary-foreground m-4 -translate-y-24 focus:translate-y-0"
+    >
+      {dict.aria.skipToContent}
+    </a>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,68 @@
+---
+/**
+ * Developer section (US4, T060). Data comes ONLY from SiteConfig.developer —
+ * the three verified links; no biography, location, employer, photo or email
+ * (FR-033, spec US4).
+ */
+import type { Locale } from "@/content/types";
+import type { Dictionary } from "@/content/types";
+import { siteConfig } from "@/config/site";
+import { Globe, Github, Linkedin } from "lucide-react";
+
+interface Props {
+  locale: Locale;
+  dict: Dictionary;
+}
+
+const { locale: _locale, dict } = Astro.props;
+const dev = siteConfig.developer;
+
+// Initials-only badge on the brand spectrum gradient (no photo available/verified).
+const initials = "OS";
+const links = [
+  { href: dev.links.website, label: dict.developer.links.website, Icon: Globe },
+  { href: dev.links.github, label: dict.developer.links.github, Icon: Github },
+  {
+    href: dev.links.linkedin,
+    label: dict.developer.links.linkedin,
+    Icon: Linkedin,
+  },
+] as const;
+---
+
+<section id="developer" class="container scroll-mt-[84px] py-12">
+  <h2 class="text-2xl font-extrabold tracking-[-0.03em] text-foreground [&:lang(ar)]:tracking-normal">
+    {dict.developer.heading}
+  </h2>
+  <div class="mt-6 flex flex-col gap-6 rounded-[14px] border border-border bg-card p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+    <div class="flex items-center gap-4">
+      <span
+        aria-hidden="true"
+        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-[#9bb8ff] bg-spectra text-base font-extrabold text-[#0d1017] shadow-sm"
+      >{initials}</span>
+      <div>
+        <p class="text-base font-bold text-foreground"><bdi dir="ltr">{dev.name}</bdi></p>
+        <p class="mt-0.5 text-xs text-muted-foreground">
+          {dict.developer.roleLabel}: <bdi dir="ltr">{dev.role}</bdi>
+        </p>
+      </div>
+    </div>
+    <ul class="flex flex-wrap gap-2.5">
+      {
+        links.map(({ href, label, Icon }) => (
+          <li>
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-muted-foreground/50 hover:bg-accent"
+            >
+              <Icon size={15} aria-hidden="true" />
+              {label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

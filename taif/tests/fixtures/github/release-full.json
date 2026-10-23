@@ -1,0 +1,126 @@
+[
+  {
+    "id": 9001,
+    "node_id": "RE_re1",
+    "tag_name": "v1.2.0",
+    "name": "TAIF 1.2.0",
+    "draft": false,
+    "prerelease": false,
+    "author": {
+      "login": "0omarahmed73"
+    },
+    "target_commitish": "main",
+    "created_at": "2026-10-01T09:00:00Z",
+    "assets": [
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0_x64.msi",
+        "id": 250521075,
+        "name": "TaifVisual_1.2.0_x64.msi",
+        "size": 24893440,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0_x64.msi"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0_amd64.deb",
+        "id": 44394225,
+        "name": "TaifVisual_1.2.0_amd64.deb",
+        "size": 23672832,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0_amd64.deb"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0_arm64-v8a.apk",
+        "id": 860289538,
+        "name": "TaifVisual_1.2.0_arm64-v8a.apk",
+        "size": 19734528,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0_arm64-v8a.apk"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0.apk",
+        "id": 528686133,
+        "name": "TaifVisual_1.2.0.apk",
+        "size": 19792896,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0.apk"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0.zip",
+        "id": 528662320,
+        "name": "TaifVisual_1.2.0.zip",
+        "size": 25123840,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0.zip"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0.msi.sig",
+        "id": 1374884959,
+        "name": "TaifVisual_1.2.0.msi.sig",
+        "size": 1024,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0.msi.sig"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0.msi.blockmap",
+        "id": 794348607,
+        "name": "TaifVisual_1.2.0.msi.blockmap",
+        "size": 2048,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0.msi.blockmap"
+      }
+    ],
+    "body": "## Changes\n\n- Trim and cut for audio and video.\n- Compress video down to 30 percent of the original size.",
+    "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/9001",
+    "html_url": "https://github.com/0omarahmed73/TaifVisual/releases/tag/v1.2.0",
+    "published_at": "2026-10-01T10:00:00Z"
+  }
+]

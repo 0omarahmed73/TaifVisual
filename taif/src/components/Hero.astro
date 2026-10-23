@@ -1,0 +1,92 @@
+---
+/**
+ * Hero (US2, T043). Name, purpose, primary action to the download center
+ * (kept from US1 / T036), secondary action to the features section.
+ *
+ * Two columns at `lg:`: copy on the start side, a faithful (decorative)
+ * preview of the app's launch splash on the end side. On smaller screens the
+ * splash stacks below the copy.
+ */
+import type { Locale, Dictionary } from "@/content/types";
+import SplashPreview from "@/components/SplashPreview.astro";
+import HeroDownload from "@/components/HeroDownload";
+
+interface Props {
+  locale: Locale;
+  dict: Dictionary;
+}
+
+const { locale, dict } = Astro.props;
+const homeHref = locale === "ar" ? "/ar" : "/";
+---
+
+<section id="hero" class="relative scroll-mt-[84px] overflow-hidden border-b border-border/60 py-16 sm:py-24">
+  <div class="container">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-10">
+      <div class="text-center lg:text-start">
+        <div
+          class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[22px] border border-border bg-card shadow-lg lg:mx-0"
+        >
+          <img
+            src="/taif-mark.svg"
+            alt=""
+            width="44"
+            height="44"
+            class="h-11 w-11"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+        <h1
+          class="text-3xl font-extrabold tracking-[-0.04em] text-foreground sm:text-5xl [&:lang(ar)]:tracking-normal"
+        >
+          <span
+            class="mb-3 inline-flex items-center rounded-full border border-border bg-secondary/70 px-3.5 py-1 text-xs font-bold tracking-[0.14em] text-muted-foreground [&:lang(ar)]:tracking-normal"
+          >
+            <bdi>{dict.hero.name}</bdi>
+          </span>
+          <span class="mt-2 block">{dict.hero.tagline}</span>
+        </h1>
+        <p
+          class="mx-auto mt-4 max-w-[68ch] text-sm leading-relaxed text-muted-foreground sm:text-base lg:mx-0"
+        >
+          {dict.hero.body}
+        </p>
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+          <HeroDownload
+            client:load
+            locale={locale}
+            primaryLabel={dict.hero.primaryAction}
+            downloadFor={dict.hero.downloadFor}
+            platformNames={dict.downloads.platform}
+          />
+          <a
+            href={homeHref + "#features"}
+            class="inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-border bg-card px-6 text-sm font-semibold text-foreground transition hover:border-muted-foreground/50 hover:bg-secondary"
+          >
+            {dict.hero.secondaryAction}
+          </a>
+        </div>
+        <ul class="mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-muted-foreground lg:justify-start">
+          {dict.hero.highlights.map((item) => (
+            <li class="inline-flex items-center gap-2">
+              <span aria-hidden="true" class="h-1.5 w-1.5 rounded-full bg-spectra"></span>
+              {item}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="flex justify-center lg:justify-end">
+        <div class="relative w-full max-w-[236px]">
+          <div
+            aria-hidden="true"
+            class="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[26rem] w-[26rem] -translate-x-1/2 -translate-y-1/2 rounded-full splash-glow"
+          >
+          </div>
+          <SplashPreview />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

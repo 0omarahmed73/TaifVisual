@@ -1,0 +1,85 @@
+---
+/**
+ * Features (US2, T044): the six operations from operations.ts with the same
+ * lucide icons the app uses (research.md §1). Availability notes are shown
+ * only where verified ("not-on-macos" for Remove Music).
+ */
+import { AudioLines, Scissors, Slice, Minimize2, ArrowRightLeft, MonitorDown } from "lucide-react";
+import { operations, type Operation } from "@/content/operations";
+import type { Dictionary } from "@/content/types";
+
+interface Props {
+  dict: Dictionary;
+}
+
+const { dict } = Astro.props;
+
+const icons: Record<Operation["id"], typeof AudioLines> = {
+  "remove-music": AudioLines,
+  trim: Scissors,
+  cut: Slice,
+  compress: Minimize2,
+  convert: ArrowRightLeft,
+  quality: MonitorDown,
+};
+---
+
+<section id="features" class="container scroll-mt-[84px] py-16">
+  <h2 class="text-2xl font-extrabold tracking-[-0.03em] text-foreground sm:text-3xl [&:lang(ar)]:tracking-normal">
+    {dict.features.heading}
+  </h2>
+  <p class="mt-2 max-w-2xl text-sm text-muted-foreground">{dict.features.intro}</p>
+  <ul class="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    {operations.map((op) => {
+      const Icon = icons[op.id];
+      const copy = dict.features.operations[op.id];
+      return (
+        <li class="flex flex-col justify-between rounded-[12px] border border-border bg-card p-4 transition-all duration-150 hover:-translate-y-px hover:border-muted-foreground/50 hover:bg-secondary/50">
+          <div class="flex items-start gap-3.5">
+            <span
+              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[hsl(var(--spectra-end)/0.12)] text-[hsl(var(--spectra-end))]"
+              aria-hidden="true"
+            >
+              <Icon size={20} strokeWidth={1.8} />
+            </span>
+            <div class="min-w-0 flex-1">
+              <h3 class="text-[15px] font-bold leading-snug text-foreground">
+                {copy.name}
+              </h3>
+              <p class="mt-1.5 text-xs leading-relaxed text-muted-foreground">
+                {copy.description}
+              </p>
+              {op.id === "remove-music" && (
+                <ul
+                  class="mt-2 space-y-1 text-[11px] leading-relaxed text-muted-foreground"
+                  data-testid="remove-music-notices"
+                >
+                  {dict.features.removeMusicNotices.map((notice) => (
+                    <li class="flex gap-1.5">
+                      <span aria-hidden="true">·</span>
+                      <span>{notice}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+          <div class="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-3">
+            <ul class="flex flex-wrap gap-1.5 text-[11px]">
+              {op.appliesTo.map((m) => (
+                <li class="rounded-md border border-border bg-field px-2 py-0.5 font-semibold uppercase tracking-wider text-muted-foreground">
+                  {dict.features.applyTo[m]}
+                </li>
+              ))}
+            </ul>
+            {op.availability === "not-on-macos" && (
+              <p class="text-[11px] font-medium text-warning">
+                {dict.features.availability["not-on-macos"]}
+              </p>
+            )}
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</section>

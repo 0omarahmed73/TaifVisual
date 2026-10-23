@@ -1,0 +1,106 @@
+---
+/**
+ * Header (US2, T048): section links plus a collapsible mobile menu.
+ * Accessibility contract: button with aria-expanded/aria-controls, Escape
+ * closes the menu, focus returns to the button. Language switch slot is
+ * filled in US3 (T056).
+ */
+import type { Dictionary, Locale } from "@/content/types";
+
+interface Props {
+  dict: Dictionary;
+  locale?: Locale;
+}
+
+const { dict, locale } = Astro.props;
+const resolvedLocale: Locale =
+  locale ?? (dict.meta.ogLocale.startsWith("ar") ? "ar" : "en");
+const brandHref = resolvedLocale === "ar" ? "/ar" : "/";
+---
+
+<header class="sticky top-0 z-30 border-b border-border bg-appbar/90 backdrop-blur-md">
+  <div class="container relative flex min-h-[61px] flex-wrap items-center justify-between gap-3 py-2.5">
+    <a
+      href={brandHref}
+      aria-label={dict.hero.name}
+      class="inline-flex items-center gap-2.5 text-foreground transition-opacity hover:opacity-90"
+    >
+      <img
+        src="/taif-mark.svg"
+        alt=""
+        width="30"
+        height="30"
+        class="h-[30px] w-[30px] shrink-0"
+      />
+      <span
+        dir="ltr"
+        class="text-sm font-bold leading-none tracking-[0.16em] text-foreground"
+      >
+        TAIF
+      </span>
+      <span aria-hidden="true" class="h-[18px] w-px bg-border"></span>
+      <span
+        lang="ar"
+        class="text-[13px] font-medium leading-none text-muted-foreground"
+      >
+        طَيْف
+      </span>
+    </a>
+    <div class="flex items-center gap-2 md:order-3">
+      <slot name="language" />
+      <button
+        id="menu-button"
+        type="button"
+        class="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-border bg-secondary/60 text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:h-9 md:w-9 md:hidden"
+        aria-expanded="false"
+        aria-controls="site-nav"
+        data-open-label={dict.aria.openMenu}
+        data-close-label={dict.aria.closeMenu}
+      >
+        <span id="menu-button-label" class="sr-only">{dict.aria.openMenu}</span>
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <line x1="4" x2="20" y1="6" y2="6" />
+          <line x1="4" x2="20" y1="12" y2="12" />
+          <line x1="4" x2="20" y1="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <nav
+      id="site-nav"
+      class="nav-panel absolute start-3 end-3 top-[calc(100%-0.125rem)] z-50 hidden max-h-[calc(100dvh-5rem)] w-auto flex-col gap-0.5 overflow-y-auto rounded-2xl border border-border bg-card/95 p-2 shadow-2xl shadow-black/40 backdrop-blur-xl md:static md:ms-auto md:flex md:max-h-none md:w-auto md:flex-row md:items-center md:gap-1 md:overflow-visible md:rounded-full md:border-0 md:bg-transparent md:p-0 md:shadow-none md:backdrop-blur-none"
+      aria-label={dict.aria.mainMenu}
+    >
+      <ul class="flex flex-col gap-0.5 md:flex-row md:items-center md:gap-1">
+        {dict.nav.links.map((link) => (
+          <li>
+            <a
+              href={`#${link.id}`}
+              class="block rounded-xl px-3.5 py-2.5 text-sm font-semibold text-muted-foreground transition-colors duration-150 hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:bg-secondary/80 md:rounded-lg md:px-3 md:py-1.5 md:text-xs"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Bundled into an external module by Astro (kept out of the HTML so the CSP
+  // needs neither 'unsafe-inline' nor a hash for this script).
+  import { initMobileMenu } from "@/scripts/mobile-menu";
+  import { initScrollSpy } from "@/scripts/scroll-spy";
+
+  initScrollSpy();
+  initMobileMenu();
+</script>

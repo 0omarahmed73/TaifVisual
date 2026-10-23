@@ -1,0 +1,23 @@
+---
+/**
+ * About (US2, T047): verified facts only (spec FR-007).
+ */
+import type { Dictionary } from "@/content/types";
+
+interface Props {
+  dict: Dictionary;
+}
+
+const { dict } = Astro.props;
+---
+
+<section id="about" class="container scroll-mt-[84px] py-12">
+  <div class="rounded-[14px] border border-border bg-gradient-to-br from-card to-background p-6 sm:p-8">
+    <h2 class="text-2xl font-extrabold tracking-[-0.03em] text-foreground [&:lang(ar)]:tracking-normal">
+      {dict.about.heading}
+    </h2>
+    <p class="mt-3 max-w-[68ch] text-sm leading-relaxed text-muted-foreground sm:text-base">
+      {dict.about.body}
+    </p>
+  </div>
+</section>

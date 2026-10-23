@@ -1,0 +1,255 @@
+/* TAIF website — global styles. Token values copied (not imported) from
+   the app's src/index.css (research.md §2 reuse decision). */
+
+/* T076: only the fonts actually used are imported. Weight usage:
+   Manrope 400 (body) / 500 (font-medium) / 600 / 700 (bold/semibold) /
+   800 (font-extrabold in the hero). Subsets limited to latin (+ latin-ext
+   for safety) — neither the UI copy nor the brand ever renders Cyrillic or
+   Vietnamese with Manrope; Arabic is covered by Noto Sans Arabic.
+   Noto Sans Arabic keeps 400/600/700 (regular, semibold, bold) with the
+   arabic subset plus its latin subset for Latin text embedded in Arabic copy. */
+@import "@fontsource/manrope/latin-400.css";
+@import "@fontsource/manrope/latin-500.css";
+@import "@fontsource/manrope/latin-600.css";
+@import "@fontsource/manrope/latin-700.css";
+@import "@fontsource/manrope/latin-800.css";
+@import "@fontsource/manrope/latin-ext-400.css";
+@import "@fontsource/manrope/latin-ext-500.css";
+@import "@fontsource/manrope/latin-ext-600.css";
+@import "@fontsource/manrope/latin-ext-700.css";
+@import "@fontsource/manrope/latin-ext-800.css";
+@import "@fontsource/noto-sans-arabic/arabic-400.css";
+@import "@fontsource/noto-sans-arabic/arabic-600.css";
+@import "@fontsource/noto-sans-arabic/arabic-700.css";
+@import "@fontsource/noto-sans-arabic/latin-400.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 225 29% 97%;
+    --foreground: 221 38% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 221 38% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 221 38% 14%;
+    --primary: 221 38% 14%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 24% 93%;
+    --secondary-foreground: 221 38% 14%;
+    --muted: 220 24% 93%;
+    --muted-foreground: 218 16% 36%;
+    --accent: 220 24% 91%;
+    --accent-foreground: 221 38% 14%;
+    --destructive: 358 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 24% 88%;
+    --input: 220 24% 85%;
+    --ring: 221 83% 58%;
+    --spectra-start: 256 80% 68%;
+    --spectra-mid: 219 90% 62%;
+    --spectra-end: 187 85% 23%;
+    --appbar: 0 0% 100%;
+    --field: 220 24% 97%;
+    --success: 152 55% 28%;
+    --warning: 38 90% 26%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+    margin-block: 0;
+  }
+
+  html {
+    font-feature-settings: "ss01";
+    text-rendering: optimizeLegibility;
+    /* Reserve the scrollbar gutter so toggling the modal scroll lock (or a
+       short/long page) never shifts content sideways. */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: "Manrope", "Noto Sans Arabic", system-ui, sans-serif;
+  }
+
+  :lang(ar) {
+    font-family: "Noto Sans Arabic", "Manrope", system-ui, sans-serif;
+  }
+
+  /* T055: mirror directional icons in RTL layouts.
+     Use the .icon-flip class on any lucide icon whose meaning is directional
+     (arrows, chevrons, message/quote fleets). Neutral icons must stay unmirrored. */
+  [dir="rtl"] .icon-flip {
+    transform: scaleX(-1);
+  }
+}
+
+@layer components {
+  /* Bootstrap 5 default responsive .container */
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 576px) {
+    .container {
+      max-width: 540px;
+    }
+  }
+  @media (min-width: 768px) {
+    .container {
+      max-width: 720px;
+    }
+  }
+  @media (min-width: 992px) {
+    .container {
+      max-width: 960px;
+    }
+  }
+  @media (min-width: 1200px) {
+    .container {
+      max-width: 1140px;
+    }
+  }
+  @media (min-width: 1400px) {
+    .container {
+      max-width: 1320px;
+    }
+  }
+
+  /* Spectral gradient — brand mark and the single focused moment only. */
+  .text-spectra {
+    @apply bg-gradient-to-r from-[hsl(var(--spectra-start))] via-[hsl(var(--spectra-mid))] to-[hsl(var(--spectra-end))] bg-clip-text text-transparent;
+  }
+  .bg-spectra {
+    @apply bg-gradient-to-r from-[hsl(var(--spectra-start))] via-[hsl(var(--spectra-mid))] to-[hsl(var(--spectra-end))];
+  }
+  .splash-glow {
+    background: radial-gradient(
+      closest-side,
+      hsl(var(--spectra-mid) / 0.28),
+      hsl(var(--spectra-start) / 0.12) 55%,
+      transparent 75%
+    );
+    filter: blur(8px);
+  }
+}
+
+/* Dark palette: placed OUTSIDE @layer because Tailwind 3.4 strips `.dark{…}`
+   from a @layer base block when darkMode is "class" (T074/FIX dark mode). */
+.dark {
+  --background: 222 28% 7%;
+  --foreground: 220 38% 97%;
+  --card: 220 27% 11%;
+  --card-foreground: 220 38% 97%;
+  --popover: 220 27% 11%;
+  --popover-foreground: 220 38% 97%;
+  --primary: 220 38% 97%;
+  --primary-foreground: 222 30% 10%;
+  --secondary: 221 30% 15%;
+  --secondary-foreground: 220 38% 97%;
+  --muted: 221 30% 15%;
+  --muted-foreground: 219 18% 71%;
+  --accent: 221 30% 15%;
+  --accent-foreground: 220 38% 97%;
+  --destructive: 358 77% 73%;
+  --destructive-foreground: 222 30% 10%;
+  --border: 220 24% 22%;
+  --input: 220 24% 22%;
+  --ring: 220 100% 79%;
+  --appbar: 217 32% 9%;
+  --field: 219 29% 10%;
+  --success: 152 55% 62%;
+  --warning: 42 81% 69%;
+  --spectra-start: 256 100% 81%;
+  --spectra-mid: 219 100% 74%;
+  --spectra-end: 187 74% 65%;
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+details:not([data-lang-dropdown]) {
+  interpolate-size: allow-keywords;
+}
+details:not([data-lang-dropdown])::details-content {
+  block-size: 0;
+  opacity: 0;
+  overflow-y: clip;
+  transition:
+    block-size 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 200ms ease,
+    content-visibility 240ms allow-discrete;
+}
+details:not([data-lang-dropdown])[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Showcase tabs are enhancement-only: hidden until showcase-tabs.ts runs. */
+#showcase:not([data-tabs-ready]) [role="tablist"] {
+  display: none;
+}
+
+/* Tailwind's `grid` utility would otherwise override the hidden attribute. */
+[data-showcase-panel][hidden] {
+  display: none;
+}
+
+/* Header: current section + condensed bar after scrolling. */
+#site-nav a[aria-current="true"] {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--secondary));
+}
+header[data-scrolled] {
+  box-shadow: 0 6px 20px -12px hsl(0 0% 0% / 0.55);
+}
+header[data-scrolled] > .container {
+  min-height: 52px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after,
+  *::details-content {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Mobile navigation panel: floats over the page with a soft entrance. */
+@media (max-width: 767px) {
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-panel:not(.hidden) {
+      transform-origin: top center;
+      animation: nav-panel-in 260ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+}
+
+@keyframes nav-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

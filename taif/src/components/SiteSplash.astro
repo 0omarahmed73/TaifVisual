@@ -1,0 +1,171 @@
+---
+/**
+ * Site splash (owner request): a faithful, brief recreation of the TAIF app
+ * splash shown once before the page is revealed. Decorative only
+ * (`aria-hidden`), no focusable elements, never gates content for assistive
+ * technology. Hidden immediately when `prefers-reduced-motion` is set, when
+ * the visitor already saw it this session, or when JS/CSS fails (auto-hide
+ * fallback below). The app splash structure is verified against
+ * public/screenshots/splash-android.png and the app's Splash screen.
+ */
+---
+
+<div id="site-splash" class="site-splash" aria-hidden="true">
+  <div class="site-splash__glow"></div>
+  <div class="site-splash__inner">
+    <img
+      src="/taif-mark.svg"
+      alt=""
+      width="64"
+      height="64"
+      class="site-splash__mark"
+      decoding="sync"
+    />
+    <div class="site-splash__lockup">
+      <span dir="ltr" class="site-splash__latin">TAIF</span>
+      <span class="site-splash__divider"></span>
+      <span lang="ar" class="site-splash__arabic">طَيْف</span>
+    </div>
+    <div class="site-splash__bar"><span class="site-splash__fill"></span></div>
+  </div>
+</div>
+
+<script>
+  import { initSiteSplash } from "@/scripts/site-splash";
+
+  initSiteSplash();
+</script>
+
+<style>
+  .site-splash {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: hsl(var(--background));
+    opacity: 1;
+    /* Purely decorative: never intercepts clicks or keyboard focus. */
+    pointer-events: none;
+    transition:
+      opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
+      visibility 420ms;
+  }
+
+  .site-splash.is-hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  /* No-JS fallback: reveal the page even if the module never runs. */
+  .site-splash {
+    animation: site-splash-fallback 1ms 2400ms forwards;
+  }
+
+  @keyframes site-splash-fallback {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+
+  .site-splash__glow {
+    position: absolute;
+    width: min(85vw, 38rem);
+    height: min(85vw, 38rem);
+    border-radius: 9999px;
+    background: radial-gradient(
+      closest-side,
+      hsl(var(--spectra-mid) / 0.3),
+      hsl(var(--spectra-start) / 0.14) 55%,
+      transparent 75%
+    );
+    filter: blur(10px);
+  }
+
+  .site-splash__inner {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    color: hsl(var(--foreground));
+  }
+
+  .site-splash__mark {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .site-splash__lockup {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .site-splash__latin {
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    color: hsl(var(--foreground));
+  }
+
+  .site-splash__divider {
+    height: 1.45rem;
+    width: 1px;
+    background: hsl(var(--border));
+  }
+
+  .site-splash__arabic {
+    font-size: 1.2rem;
+    font-weight: 500;
+    line-height: 1;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .site-splash__bar {
+    width: min(58vw, 15rem);
+    height: 3px;
+    border-radius: 9999px;
+    background: hsl(var(--border) / 0.75);
+    overflow: hidden;
+  }
+
+  .site-splash__fill {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(
+      to right,
+      hsl(var(--spectra-start)),
+      hsl(var(--spectra-mid)),
+      hsl(var(--spectra-end))
+    );
+    animation: site-splash-progress 1100ms cubic-bezier(0.4, 0, 0.2, 1)
+      forwards;
+  }
+
+  @keyframes site-splash-progress {
+    to {
+      width: 100%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-splash {
+      display: none;
+    }
+
+    .site-splash__fill {
+      animation: none;
+      width: 100%;
+    }
+  }
+</style>

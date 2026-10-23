@@ -1,0 +1,51 @@
+[
+  {
+    "id": 9001,
+    "node_id": "RE_re1",
+    "tag_name": "v1.2.0",
+    "name": "TAIF 1.2.0",
+    "draft": false,
+    "prerelease": false,
+    "author": {
+      "login": "0omarahmed73"
+    },
+    "target_commitish": "main",
+    "created_at": "2026-10-01T09:00:00Z",
+    "assets": [
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0_x64.msi",
+        "id": 250521075,
+        "name": "TaifVisual_1.2.0_x64.msi",
+        "size": 24893440,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "starter",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0_x64.msi"
+      },
+      {
+        "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/assets/TaifVisual_1.2.0_arm64-v8a.apk",
+        "id": 860289538,
+        "name": "TaifVisual_1.2.0_arm64-v8a.apk",
+        "size": 19734528,
+        "label": "",
+        "uploader": {
+          "login": "0omarahmed73"
+        },
+        "content_type": "application/octet-stream",
+        "state": "uploaded",
+        "created_at": "2026-10-01T09:30:00Z",
+        "updated_at": "2026-10-01T09:30:00Z",
+        "browser_download_url": "https://github.com/0omarahmed73/TaifVisual/releases/download/v1.2.0/TaifVisual_1.2.0_arm64-v8a.apk"
+      }
+    ],
+    "body": "## Changes\n\n- Trim and cut for audio and video.\n- Compress video down to 30 percent of the original size.",
+    "url": "https://api.github.com/repos/0omarahmed73/TaifVisual/releases/9001",
+    "html_url": "https://github.com/0omarahmed73/TaifVisual/releases/tag/v1.2.0",
+    "published_at": "2026-10-01T10:00:00Z"
+  }
+]

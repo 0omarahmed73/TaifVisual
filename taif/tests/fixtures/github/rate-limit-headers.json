@@ -1,0 +1,10 @@
+{
+  "status": 403,
+  "headers": {
+    "x-ratelimit-limit": "60",
+    "x-ratelimit-remaining": "0",
+    "x-ratelimit-reset": "1799999999",
+    "x-ratelimit-used": "60",
+    "access-control-expose-headers": "x-ratelimit-limit, x-ratelimit-remaining, x-ratelimit-reset, x-ratelimit-used"
+  }
+}
